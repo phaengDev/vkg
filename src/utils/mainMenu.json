@@ -1,0 +1,236 @@
+{
+  "main": [
+    {
+      "id": 1,
+      "mainName": "ໜ້າຫຼັກ",
+      "link": "home",
+      "icon": "fa-solid fa-house",
+      "sts": "1",
+      "datasub": []
+    },
+    {
+      "id": 2,
+      "mainName": "ລາຄາຊື້-ຂາຍ",
+      "link": "price",
+      "icon": "fa-solid fa-tags",
+      "sts": "1",
+      "datasub": []
+    },
+    {
+      "id": 3,
+      "mainName": "ຈັດການການຂາຍ",
+      "link": "",
+      "icon": "fa-solid fa-cart-plus",
+      "sts": "2",
+      "datasub": [
+        {
+          "_id": 1,
+          "mainId": 2,
+          "sumName": "ໜ້າຂາຍ",
+          "parth": "sale"
+        },
+        {
+          "_id": 2,
+          "mainId": 2,
+          "sumName": "ກວດສອບຊື້ອອນໄລນ໌",
+          "parth": "check-bill"
+        },
+        {
+          "_id": 3,
+          "mainId": 2,
+          "sumName": "ຍົກເລີກບິນຂາຍ",
+          "parth": "cancle"
+        },
+        {
+          "_id": 4,
+          "mainId": 2,
+          "sumName": "ປິດການຂາຍປະຈຳວັນ",
+          "parth": "offSale"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "mainName": "ພະນັກງານ",
+      "link": "",
+      "icon": "fa-solid fa-address-card",
+      "sts": "2",
+      "datasub": [
+        {
+          "_id": 1,
+          "mainId": 4,
+          "sumName": "ຂໍ້ມູນພະນັກງານ",
+          "parth": "staff"
+        },
+        {
+          "_id": 2,
+          "mainId": 4,
+          "sumName": "ລາຍການສະໝັກງານ",
+          "parth": "item-regist-job"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "mainName": "ຂໍ້ມູນຜະລິດຕະພັນ",
+      "link": "",
+      "icon": "fa-solid fa-layer-group",
+      "sts": "2",
+      "datasub": [
+        {
+          "_id": 4,
+          "mainId": 4,
+          "sumName": "ສາງສະຕ໋ອກຂາຍ",
+          "parth": "stock"
+        },
+        {
+          "_id": 5,
+          "mainId": 4,
+          "sumName": "ປະເພດພະລິດຕະພັນ",
+          "parth": "type"
+        },
+        {
+          "_id": 6,
+          "mainId": 4,
+          "sumName": "ຂໍ້ມູນພະລິດຕະພັນ",
+          "parth": "product"
+        },
+        {
+          "_id": 7,
+          "mainId": 4,
+          "sumName": "ຂໍ້ມູນລວດລາຍ",
+          "parth": "pattern"
+        },
+        {
+          "_id": 8,
+          "mainId": 4,
+          "sumName": "ຈັດການ ການນຳເຂົ້າ",
+          "parth": "received"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "mainName": "ລາຍງານ",
+      "link": "",
+      "icon": " fa-solid fa-newspaper",
+      "sts": "2",
+      "datasub": [
+        {
+          "_id": 9,
+          "mainId": 5,
+          "sumName": "ລາຍງານຂາຍປະຈຳວັນ",
+          "parth": "r-sale"
+        },
+        {
+          "_id": 10,
+          "mainId": 5,
+          "sumName": "ລາຍງານຂາຍລະອຽດ",
+          "parth": "r-list"
+        },
+        {
+          "_id": 11,
+          "mainId": 5,
+          "sumName": "ລາຍງານນຳເຂົ້າປະຈຳວັນ",
+          "parth": "r-import"
+        },
+        {
+          "_id": 12,
+          "mainId": 5,
+          "sumName": "ລາຍງານສະຕ໋ອກ",
+          "parth": "r-stock"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "mainName": "ການຕັ້ງຄ່າ",
+      "link": "",
+      "icon": " fa-solid fa-sliders",
+      "sts": "2",
+      "datasub": [
+        {
+          "_id": 13,
+          "mainId": 6,
+          "sumName": "ຕັ້ງຄ່າຂໍ້ມູນພື້ນຖານ",
+          "parth": "system"
+        },
+        {
+          "_id": 14,
+          "mainId": 6,
+          "sumName": "ຕັ້ງຄ່າໂຊນຂາຍ",
+          "parth": "zone"
+        },
+        {
+          "_id": 15,
+          "mainId": 6,
+          "sumName": "ຈັດການຜູ້ໃຊ້ລະບົບ",
+          "parth": "user"
+        },
+        {
+          "_id": 16,
+          "mainId": 6,
+          "sumName": "ຕັ້ງຄ່າສິດການໃຊ້ລະບົບ",
+          "parth": "#"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "mainName": "ຈັດການເວັບໄຊ້",
+      "link": "",
+      "icon": "fa-solid fa-globe",
+      "sts": "2",
+      "datasub": [
+        {
+          "_id": 15,
+          "mainId": 7,
+          "sumName": "ສິນຄ້າແນະນຳ",
+          "parth": "Recd"
+        },
+        {
+          "_id": 16,
+          "mainId": 7,
+          "sumName": "ຕັ້ງຄ່າໂປຣໂມຊັ່ນ",
+          "parth": "promotion"
+        },
+        {
+          "_id": 17,
+          "mainId": 7,
+          "sumName": "ເພີ່ມຂໍ້ມູນຂ່າວສານ",
+          "parth": "event"
+        },
+        {
+          "_id": 18,
+          "mainId": 7,
+          "sumName": "ວິດີໂອ ລິວິວ",
+          "parth": "reviews"
+        },
+        {
+          "_id": 19,
+          "mainId": 7,
+          "sumName": "ຕັ້ງຄ່າພາບສະໄລໂຊ",
+          "parth": "slider"
+        },
+        {
+          "_id": 20,
+          "mainId": 7,
+          "sumName": "ຂອງຂວັນ ຫຼື ຂອງແຖມ",
+          "parth": "gift"
+        },
+        {
+          "_id": 21,
+          "mainId": 7,
+          "sumName": "ຮັບສະມັກວຽກ",
+          "parth": "apply-job"
+        },
+        {
+          "_id": 22,
+          "mainId": 7,
+          "sumName": "ນະໂຍບາຍຂອງຮ້ານ",
+          "parth": "policy"
+        }
+      ]
+    }
+  ]
+}
