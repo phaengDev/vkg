@@ -4,16 +4,26 @@
   font-weight: 700;
   font-style: normal;
 }
+
+@font-face {
+  font-family: "phetsarath-ot";
+  src: url("/public/assets/css/fonts/PhetsarathOT.ttf");
+  font-weight: 700;
+  font-style: normal;
+}
 body {
-  font-family: "LAOS", sans-serif;
+  font-family: sans-serif;
   background: #fff;
 }
-
 @page {
   size: 2.8in 11in;
   margin-top: 0cm;
   margin-left: 0cm;
   margin-right: 0cm;
+}
+
+.fonts-laos{
+  font-family: "phetsarath-ot", sans-serif;
 }
 table td {
   margin-left: auto;

@@ -34,7 +34,7 @@ const Invoice = ({ show, handleClose,showStaff,fetchChart, invoice }) => {
     return (
         <>
             <Modal show={show} onHide={handleModalClose} size='md'>
-                <Modal.Body className='bg-white'>
+                <Modal.Body className='bg-white fonts-laos'>
                     <div style={{ position: 'absolute', top: '5px', right: '10px' }} role='button' onClick={handleModalClose}>
                         <i class="fa-solid fa-circle-xmark fs-2 text-red" />
                     </div>
