@@ -14,6 +14,16 @@ export default function ApplyForJob() {
     const [open, setOpen] = React.useState(false);
     const handleOpen = (index) => {
         setOpen(index);
+        setInputs({
+            apply_jobId: '',
+            apply_job_title: '',
+            apply_job_text: '',
+            start_date: new Date(),
+            end_date: new Date(),
+            job_image: ''
+        });
+        setSelectedFile(null);
+        setImageUrl('');
     }
     const [inputs, setInputs] = useState({
         apply_jobId: '',

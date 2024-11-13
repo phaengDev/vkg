@@ -1,6 +1,6 @@
 // import React,{useState} from "react";
 import Swal from "sweetalert2"; 
-// import { Message, useToaster } from 'rsuite';
+
   const Alert = {
     errorLoing(name){ 
       Swal.fire({
@@ -47,6 +47,10 @@ warningData(name){
     confirmButtonColor: "#0fac29",
   })
 },
+
+
+
+
 // Notification(titleName,messName,notifi){
 //   const toaster = useToaster();
 // const [placement, setPlacement] = useState('topEnd');
@@ -58,7 +62,7 @@ warningData(name){
 // toaster.push(message, { placement });
 // }
   }
-
+  
 
   export default Alert;
 

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { Modal } from 'react-bootstrap';
-import { Button, Input, Message, useToaster, Pagination, Placeholder, Loader, InputPicker } from 'rsuite';
+import { Button, Input } from 'rsuite';
 import axios from 'axios';
 import { Config, Urlimage } from '../config/connect';
 function ReviewsProduct() {

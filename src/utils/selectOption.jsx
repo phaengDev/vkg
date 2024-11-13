@@ -55,9 +55,29 @@ export function useOption() {
   
       showOptiongold();
     }, []); 
-    const data = itemOption.map(item => ({ label: item.option_name, value: item.option_id }));
+    const data = itemOption.map(item => ({ label: item.option_name, value: item.option_id}));
     return data;
   }
+
+
+export function useOptionLm() {
+  const [itemOption, setItemOption] = useState([]);
+  useEffect(() => {
+    const showOptiongold2 = async () => {
+      try {
+        const response = await fetch(api + 'type/option-lm');
+        const jsonData = await response.json();
+        setItemOption(jsonData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    showOptiongold2();
+  }, []); 
+  const data = itemOption.map(item => ({ label: item.option_name, value: item.option_id,grams:item.grams }));
+  return data;
+}
 
   
     export function useBranch() {

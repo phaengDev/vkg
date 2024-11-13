@@ -7,6 +7,7 @@ import numeral from 'numeral';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import ReactToPrint from 'react-to-print';
+import { toPng } from 'html-to-image';
 const Invoice = ({ show, handleClose,showStaff,fetchChart, invoice }) => {
     const api = Config.urlApi;
     const [data, setData] = useState({ dataList: [] });
@@ -21,7 +22,6 @@ const Invoice = ({ show, handleClose,showStaff,fetchChart, invoice }) => {
         }
     }
     const componentRef = useRef();
-
     useEffect(() => {
         fetchData();
     }, [invoice]);
@@ -31,6 +31,25 @@ const Invoice = ({ show, handleClose,showStaff,fetchChart, invoice }) => {
         showStaff();
         fetchChart();
       };
+
+
+    //   const qrRef = useRef(null);
+      const downloadImg = () => {
+        // if (componentRef.current === null) {
+        //   return;
+        // }
+        toPng(componentRef.current)
+          .then((dataUrl) => {
+            const link = document.createElement('a');
+            link.href = dataUrl;
+            link.download = data.sale_billNo+'.jpg';
+            link.click();
+          })
+          .catch((err) => {
+            console.error('Failed to generate QR code image:', err);
+          });
+      };
+
     return (
         <>
             <Modal show={show} onHide={handleModalClose} size='md'>
@@ -38,6 +57,10 @@ const Invoice = ({ show, handleClose,showStaff,fetchChart, invoice }) => {
                     <div style={{ position: 'absolute', top: '5px', right: '10px' }} role='button' onClick={handleModalClose}>
                         <i class="fa-solid fa-circle-xmark fs-2 text-red" />
                     </div>
+
+
+
+
                     <div ref={componentRef}>
                         <div id='printableArea' class="receipt">
                             <header>
@@ -127,9 +150,13 @@ const Invoice = ({ show, handleClose,showStaff,fetchChart, invoice }) => {
                             </section>
                         </div>
                     </div>
+
+
+
+
                     <div className="text-center mt-4">
-                        <ReactToPrint
-                            trigger={() =>
+                        <Button variant="red" className='rounded-pill me-2' onClick={downloadImg}> <i class="fa-solid fa-cloud-arrow-down"/> ໂຫລດ </Button>
+                        <ReactToPrint trigger={() =>
                                 <Button variant="primary" className='rounded-pill'> <i class="fa-solid fa-print" /> print </Button>}
                                 content={() => componentRef.current} // use useRef's current
                                 documentTitle="New Document"

@@ -132,9 +132,7 @@ useEffect(()=>{
                     <Button onClick={onClose} appearance="primary">
                         Ok
                     </Button>
-                    <Button onClick={onClose} appearance="subtle">
-                        Cancel
-                    </Button>
+                    <Button onClick={onClose} color='red' appearance="primary">ປິດ</Button>
                 </Modal.Footer>
             </Modal>
 

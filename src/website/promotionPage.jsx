@@ -9,7 +9,19 @@ export default function PromotionPage() {
   const api = Config.urlApi;
   const img = Urlimage.url;
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () =>{
+    setInputs({
+      promotionId: '',
+      promotion_title: '',
+      promotion_detail: '',
+      pro_image: '',
+      start_date: new Date(),
+      end_date: new Date(),
+    })
+    setOpen(true);
+    setImageUrl('')
+    setSelectedFile(null);
+  }
   const handleClose = () => setOpen(false);
 
   const [inputs, setInputs] = useState({
@@ -265,7 +277,7 @@ export default function PromotionPage() {
             </div>
             <div className="row">
               <div className="form-group mb-2 col-6">
-                <label htmlFor="" className='form-label'>ວັນທີເລີກ</label>
+                <label htmlFor="" className='form-label'>ວັນທີເລີມ</label>
                 <DatePicker oneTap format='dd/MM/yyyy' value={inputs.start_date} onChange={(e) => handleChange('start_date', e)} block />
               </div>
               <div className="form-group mb-2 col-6">

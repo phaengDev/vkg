@@ -56,6 +56,12 @@ const FormAddPolicy = ({ show, handleClose, fetchPolicy, val }) => {
                 policy_name: val.policy_name || '',
                 policy_detail: val.policy_detail || ''
             })
+        }else{
+            setValues({
+                policy_id: '',
+                policy_name: '',
+                policy_detail: ''
+            })
         }
     }, [val])
     return (

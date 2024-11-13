@@ -248,7 +248,8 @@ const handleSelect = (item) => {
             <table class="table table-hover text-nowrap">
               <thead>
                 <tr>
-                  <th class="pt-0 pb-2"></th>
+                  <th class="pt-0 pb-2 text-center">ລ/ດ</th>
+                  <th class="pt-0 pb-2 text-center">ການຕັ້ງຄ່າ</th>
                   <th class="pt-0 pb-2">ລາຍການສິນຄ້າ</th>
                   <th class="pt-0 pb-2">ນ້ຳໜັກ</th>
                   <th class="pt-0 pb-2">ລາຄາຂາຍ</th>
@@ -259,7 +260,8 @@ const handleSelect = (item) => {
               <tbody>
                 {currentItems.map((item,index)=>(
                 <tr>
-                  <td class="w-10px align-middle"> {index+1} 
+                  <td className='text-center'> {index+1} </td>
+                  <td class="w-10px align-middle">
                     <span className='ms-1'>
                       <button type='button' onClick={()=>heandleEdit(item)} className='btn btn-xs btn-green me-1' ><i class="fa-solid fa-pen-to-square"/></button>
                       <button type='button' onClick={()=>handleDelete(item.recomended_id)} className='btn btn-xs btn-red' ><i class="fa-solid fa-trash"></i></button>
@@ -372,7 +374,6 @@ const handleSelect = (item) => {
         </form>
       </Modal>
     </div>
-
   )
 }
 

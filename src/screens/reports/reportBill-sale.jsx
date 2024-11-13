@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom';
 import { DatePicker, Input, SelectPicker, Placeholder, Pagination } from 'rsuite';
 import { useStaff } from '../../utils/selectOption';
 import { Config } from '../../config/connect';
@@ -72,7 +73,7 @@ const fetchChart=()=>{
         <div id="content" className="app-content  p-0 ">
             <div class="app-content-padding bg-component">
                 <div class="d-lg-flex mb-lg-3 mb-2">
-                    <h1 class="page-header mb-0 flex-1">ລາຍການບິນຂາຍປະຈຳວັນ</h1>
+                    <h1 class="page-header mb-0 flex-1"> <Link to={'/r-sale'} ><i class="fa-solid fa-circle-arrow-left fs-2 text-red"/></Link> ລາຍການບິນຂາຍປະຈຳວັນ</h1>
                 </div>
                 <div className="row ">
                     <div className='col-sm-3 col-6  col-lg-3'>

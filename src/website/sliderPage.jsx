@@ -8,7 +8,17 @@ export default function SliderPage() {
   const api=Config.urlApi;
   const img=Urlimage.url;
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    setInputs({
+        sliderId:'',
+        slider_title:'',
+        slider_detail:'',
+        slider_image:''
+    })
+    setOpen(true);
+    setSelectedFile(null);
+    setImageUrl('');
+  };
   const handleClose = () => setOpen(false);
 
   const [inputs,setInputs]=useState({
@@ -233,5 +243,4 @@ useEffect(()=>{
         </form>
       </Modal>
     </div>
-  )
-}
+  )}

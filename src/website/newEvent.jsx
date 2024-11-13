@@ -14,9 +14,19 @@ export default function NewEvent() {
     const api = Config.urlApi;
     const img = Urlimage.url;
     const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-
+    const handleOpen = () => {
+        setValues({
+            event_id: '',
+            titleName: '',
+            newText: ''
+        })
+        setOpen(true);
+        setFileList([]);
+    };
+    const handleClose = () => {
+        setOpen(false);
+        setFileList([]);
+    }
     const [values, setValues] = useState({
         event_id: '',
         titleName: '',

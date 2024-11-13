@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Message, useToaster, Input, SelectPicker, InputGroup } from 'rsuite';
+import { Modal, Button, Message, useToaster, Input, SelectPicker, InputGroup, InputPicker } from 'rsuite';
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { Config } from '../../config/connect';
 import numeral from 'numeral';
 import { useOption, useType } from '../../utils/selectOption';
 // import ChartPrice from '../Chart/chartUpdate-price';
+import FromSetPrice from './FromSetPrice';
 export default function SetPirceSale() {
     const api = Config.urlApi;
     const itempt = useOption();
@@ -73,7 +74,9 @@ export default function SetPirceSale() {
     const fecthData = async () => {
         try {
             const response = await axios.post(api + 'price/', datasch);
+            console.log(response.data)
             setItemData(response.data);
+
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -85,92 +88,92 @@ export default function SetPirceSale() {
     const handleModal = (index) => {
         setOpen(index)
     }
+    const [itemEd,setItemEd]=useState({})
     const headleEdit = (item) => {
+        setItemEd(item)
         setOpen(true)
-        setInputs({
-            prices_id: item.prices_id,
-            type_id_fk: item.type_id_fk,
-            kilograms: item.kilograms,
-            price_buy: item.price_buy,
-            price_sale: item.price_sale,
-            price_buy_old: item.price_buy,
-            price_sale_old: item.price_sale,
-            Decrease:item.decrease,
-            price_img: ''
-        })
+        // setInputs({
+        //     prices_id: item.prices_id,
+        //     type_id_fk: item.type_id_fk,
+        //     kilograms: item.kilograms,
+        //     price_buy: item.price_buy,
+        //     price_sale: item.price_sale,
+        //     price_buy_old: item.price_buy,
+        //     price_sale_old: item.price_sale,
+        //     Decrease:item.decrease,
+        //     price_img: ''
+        // })
     }
 
 
-    const [inputs, setInputs] = useState({
-        prices_id: '',
-        kilograms: '',
-        type_id_fk: '',
-        price_buy: '',
-        price_sale: '',
-        price_buy_old: '0',
-        price_sale_old: '0',
-        price_img: '',
-        Decrease:'0'
-    })
+    // const [inputs, setInputs] = useState({
+    //     prices_id: '',
+    //     kilograms: '',
+    //     type_id_fk: '',
+    //     price_buy: '',
+    //     price_sale: '',
+    //     price_buy_old: '0',
+    //     price_sale_old: '0',
+    //     price_img: '',
+    //     Decrease:'0'
+    // })
 
 
-    const handleChange = (name, value) => {
-        setInputs({
-            ...inputs, [name]: value
-        })
+    // const handleChange = (name, value) => {
+    //     setInputs({
+    //         ...inputs, [name]: value
+    //     })
        
-    }
+    // }
 
-    const handleSumit = (event) => {
-        event.preventDefault();
-        const inputData = new FormData();
-        for (const key in inputs) {
-            inputData.append(key, inputs[key]);
-        }
-        try {
-            axios.post(api + 'price/create', inputData)
-                .then(function (res) {
-                    if (res.status === 200) {
-                        setOpen(false)
-                        fecthData();
-                        showMessage(res.data.message, 'success')
-                    } else {
-                        showMessage(res.data.message, 'error')
-                    }
-                }).catch(function (error) {
-                    showMessage('ເກີດຂໍ້ຜິດພາດບໍ່ສາມາດບັນທຶກໄດ້', 'error')
-                })
-        } catch (error) {
-            console.error('Error inserting data:', error);
-        }
-    }
-
-
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [imageUrl, setImageUrl] = useState('');
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        setInputs({
-            ...inputs,
-            price_img: file
-        });
-        if (file) {
-            setSelectedFile(file);
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImageUrl(reader.result);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-    const handleClearImage = () => {
-        setSelectedFile(null);
-        setImageUrl('')
-        setInputs({
-            ...inputs,
-            price_img: ''
-        });
-    };
+    // const handleSumit = (event) => {
+    //     event.preventDefault();
+    //     const inputData = new FormData();
+    //     for (const key in inputs) {
+    //         inputData.append(key, inputs[key]);
+    //     }
+    //     try {
+    //         axios.post(api + 'price/create', inputData)
+    //             .then(function (res) {
+    //                 if (res.status === 200) {
+    //                     setOpen(false)
+    //                     fecthData();
+    //                     showMessage(res.data.message, 'success')
+    //                 } else {
+    //                     showMessage(res.data.message, 'error')
+    //                 }
+    //             }).catch(function (error) {
+    //                 showMessage('ເກີດຂໍ້ຜິດພາດບໍ່ສາມາດບັນທຶກໄດ້', 'error')
+    //             })
+    //     } catch (error) {
+    //         console.error('Error inserting data:', error);
+    //     }
+    // }
+    // const [selectedFile, setSelectedFile] = useState(null);
+    // const [imageUrl, setImageUrl] = useState('');
+    // const handleFileChange = (e) => {
+    //     const file = e.target.files[0];
+    //     setInputs({
+    //         ...inputs,
+    //         price_img: file
+    //     });
+    //     if (file) {
+    //         setSelectedFile(file);
+    //         const reader = new FileReader();
+    //         reader.onloadend = () => {
+    //             setImageUrl(reader.result);
+    //         };
+    //         reader.readAsDataURL(file);
+    //     }
+    // };
+    // const handleClearImage = () => {
+    //     setSelectedFile(null);
+    //     setImageUrl('')
+    //     setInputs({
+    //         ...inputs,
+    //         price_img: ''
+    //     });
+    // };
 
 
     const toaster = useToaster();
@@ -189,11 +192,11 @@ export default function SetPirceSale() {
     }, [])
 
 
-    const [isReadOnly, setIsReadOnly] = useState(true); // Initialize state to control read-only mode
+    // const [isReadOnly, setIsReadOnly] = useState(true); // Initialize state to control read-only mode
 
-    const handleUnlock = () => {
-        setIsReadOnly(!isReadOnly); // Toggle the read-only state
-    };
+    // const handleUnlock = () => {
+    //     setIsReadOnly(!isReadOnly); // Toggle the read-only state
+    // };
 
     return (
         <>
@@ -365,7 +368,7 @@ export default function SetPirceSale() {
                 </div>
             </div>
 
-            <Modal size={'md'} open={open} onClose={() => handleModal(false)}>
+            {/* <Modal size={'md'} open={open} onClose={() => handleModal(false)}>
                 <form onSubmit={handleSumit}>
                     <Modal.Header >
                         <Modal.Title className='py-2'>ຟອມຕັ້ງຄ່າລາຄາຊື້-ຂາຍ</Modal.Title>
@@ -380,9 +383,10 @@ export default function SetPirceSale() {
                             <div className="col-sm-6 mb-2">
                                 <label htmlFor="" className='form-label'>ນ້ຳໜັກ </label>
                                 <InputGroup inside >
-                                    <Input data={itempt} value={inputs.kilograms} onChange={(e) => handleChange('kilograms', e)} placeholder='ນ້ຳໜັກ' block readOnly />
+                                    <Input value={inputs.kilograms} onChange={(e) => handleChange('kilograms', e)} placeholder='ນ້ຳໜັກ' block readOnly />
                                     <InputGroup.Addon>g</InputGroup.Addon>
                                 </InputGroup>
+
                             </div>
 
                             <div className="col-sm-6 mb-2">
@@ -443,8 +447,14 @@ export default function SetPirceSale() {
                         </Button>
                     </Modal.Footer>
                 </form>
-            </Modal>
+            </Modal> */}
 
+<FromSetPrice
+open={open}
+handleClose={()=>setOpen(false)}
+item={itemEd}
+fecthData={fecthData}
+/>
 
             <Modal size={'xs'} open={openpt} onClose={() => optionModal(false)}>
                 <form onSubmit={handleSumitPt}>

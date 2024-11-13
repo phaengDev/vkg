@@ -41,6 +41,8 @@ import CheckBillOnline from '../screens/check-online/Check-bill-online';
 import PolicyShop from '../website/policy-shop';
 import ItemRegisterJop from '../screens/staff/item-register-jop';
 import ReviewsProduct from '../website/reviews-product';
+import GetmoneyBillSale from '../screens/action/GetmoneyBillSale';
+import Pycenters from '../website/Pycenters';
 import { Routes, Route, Navigate } from 'react-router-dom';
 export default function AppContent() {
  
@@ -89,6 +91,9 @@ export default function AppContent() {
             <Route path='/billsale' element={<ReportBillsale/>} />
             <Route path='/item-regist-job' element={<ItemRegisterJop />} />
             <Route path='/reviews' element={<ReviewsProduct/>}/>
+            <Route path='/p-center' element={<Pycenters/>}/>
+            <Route path='/checkSale' element={<GetmoneyBillSale/>}/>
+            
         </Routes>
   )
 }

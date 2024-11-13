@@ -18,6 +18,8 @@ export default function GiftMenory() {
             gift_img: '',
             giftPrice:0
         })
+        setSelectedFile(null);
+        setImageUrl('');
     } 
     const handleClose = () => setOpen(false);
 

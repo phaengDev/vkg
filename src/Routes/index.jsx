@@ -5,7 +5,10 @@ import AppContent from './Paste'
 // import Loader from '../layout/loader'
 import _ from 'lodash';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Config } from '../config/connect';
+import axios from 'axios';
 export default function Application() {
+  const api=Config.urlApi;
   const location = useLocation();
   const pathName = location.pathname;
   const [path, setPath] = useState(pathName);
@@ -13,16 +16,39 @@ export default function Application() {
   const routes=['/r-sale' && '/received']
 
   const navigate = useNavigate();
-  const token=localStorage.getItem('token');
   useEffect(() => {
-    if (!token) {
-      navigate('/login');
-    }
+    // if (!token) {
+    //   navigate('/login');
+    // }
+
+    const token = localStorage.getItem('token'); // Get token from localStorage
+    const checkTokenAndMakeRequest = async () => {
+      if (!token) {
+        navigate('/login');
+      } else {
+        try {
+          const resp = await axios.post(api + 'login/authen', {}, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'Authorization': 'Bearer ' + token
+            }
+          });
+
+          console.log('Response:', resp.data); 
+        } catch (error) {
+          console.error('Error making the API request:', error); // Handle errors
+          navigate('/login');
+        }
+      }
+    };
+
+    checkTokenAndMakeRequest();
+
     setPath(pathName);
     if(_.includes(routes,path)){
       setMinified(true);
     }
-  }, [pathName,token]);
+  }, [pathName,navigate]);
   return (
     <>
       {/* <Loader /> */}

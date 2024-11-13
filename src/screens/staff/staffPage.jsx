@@ -179,14 +179,13 @@ export default function StaffPage() {
         </ol>
         <h1 class="page-header mb-3">ຂໍ້ມູນພະນັກງານ</h1>
         <div className="panel pt-4 px-2">
-          <div className="table-responsive">
-            <div class="d-lg-flex align-items-center mb-2">
+        <div class="d-lg-flex align-items-center mb-2">
               <div class="d-lg-flex d-none align-items-center text-nowrap">
                 ສະແດງ:
                 <select onChange={(e) => handleShowLimit(e.target.value)} class="form-select ms-2  ">
-                  <option selected>50</option>
-                  <option>100</option>
-                  <option>150</option>
+                  <option value={50} selected>50</option>
+                  <option value={100}>100</option>
+                  <option value={150}>150</option>
                 </select>
               </div>
               <div class="d-lg-block d-none ms-2 text-body text-opacity-50">ລາຍການ</div>
@@ -194,6 +193,7 @@ export default function StaffPage() {
                 <Input  onChange={(event) => Filter(event)} placeholder='ຄົ້ນຫາ...' />
               </div>
             </div>
+          <div className="table-responsive">
             <table className="table table-striped table-bordered align-middle w-100 text-nowrap">
               <thead className='thead-plc'>
                 <tr>
@@ -251,7 +251,9 @@ export default function StaffPage() {
                 </>)}
               </tbody>
             </table>
-            <div class="d-md-flex align-items-center mb-4">
+            
+          </div>
+          <div class="d-md-flex align-items-center mb-4">
               <div class="me-md-auto text-md-left text-center mb-2 mb-md-0">
                 ສະແດງ 1 ຫາ {itemsPerPage} ຂອງ {qtyItem} ລາຍການ
               </div>
@@ -267,7 +269,6 @@ export default function StaffPage() {
                 <li className="page-item"><span role="button" onClick={handleNextbtn} className={`page-link  ${currentPage === pages[pages.length - 1] ? 'disabled' : 'border-blue'}`}>ໜ້າຕໍ່ໄປ</span></li>
               </ul>
             </div>
-          </div>
         </div>
 
         <Modal size='sm' show={showqr} onHide={() => setShowqr()}>
@@ -277,10 +278,10 @@ export default function StaffPage() {
                     <div class="top-card">
                         <img src={staff.profile && staff.profile !=='null'? url+'porfile/'+staff.profile: 'assets/img/icon/user.webp'} />
                     </div>
-                    <div class="bottom-card">
+                    <div class="bottom-card text-center">
                         <p>ຮ້ານຄຳ ນາງວຽງຄຳ</p>
-                        <div class="barcode mb-3">
-                           <QRCodeSVG
+                        <div class="barcode mb-3 ">
+                         <center>  <QRCodeSVG
                             value={idcode}
                             size={'250'}
                             bgColor={"#ffffff"}
@@ -292,6 +293,7 @@ export default function StaffPage() {
                               excavate: true,
                             }}
                           />
+                          </center>
                         </div>
                         <br />
                         <p class="no p text-start ms-3"><i class="fa-solid fa-user" /> : {staff.first_name+' '+staff.last_name}</p>

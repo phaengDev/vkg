@@ -32,17 +32,23 @@
         {
           "_id": 2,
           "mainId": 2,
+          "sumName": "ຮັບເງິນບິນຂາຍ",
+          "parth": "checkSale"
+        },
+        {
+          "_id": 3,
+          "mainId": 2,
           "sumName": "ກວດສອບຊື້ອອນໄລນ໌",
           "parth": "check-bill"
         },
         {
-          "_id": 3,
+          "_id": 4,
           "mainId": 2,
           "sumName": "ຍົກເລີກບິນຂາຍ",
           "parth": "cancle"
         },
         {
-          "_id": 4,
+          "_id": 5,
           "mainId": 2,
           "sumName": "ປິດການຂາຍປະຈຳວັນ",
           "parth": "offSale"
@@ -229,6 +235,12 @@
           "mainId": 7,
           "sumName": "ນະໂຍບາຍຂອງຮ້ານ",
           "parth": "policy"
+        },
+        {
+          "_id": 23,
+          "mainId": 7,
+          "sumName": "ພີເຊັນເຕີ",
+          "parth": "p-center"
         }
       ]
     }

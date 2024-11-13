@@ -4,26 +4,21 @@ import Modal from 'react-bootstrap/Modal';
 import { Input, Message, useToaster, InputGroup, InputPicker } from 'rsuite';
 import axios from 'axios';
 import { Config, Urlimage } from '../../config/connect';
-import Alert from '../../utils/config';
 import numeral from 'numeral';
 import Invoice from '../../invoice/bill-invoice';
 // import Swal from 'sweetalert2';
-import Select from 'react-select'
-import { useStaff, useOption } from '../../utils/selectOption';
+import { useStaff, useOption} from '../../utils/selectOption';
 
 import ReactToPrint from 'react-to-print';
-
-import { RadioTile, RadioTileGroup, useMediaQuery } from 'rsuite';
-import { useRate } from '../../utils/selectOption';
+import Select from 'react-select'
 import ModalOrder from './Modal-order';
 import PrintBillTest from './print-billTest';
-
+import FromPayment from './From-Payment';
 function FormSale() {
   const api = Config.urlApi;
   const img = Urlimage.url;
   const itemOption = useOption();
-
-  const { dataList } = useRate()
+ 
   const navigate = useNavigate();
   const handleBack = () => {
     navigate(`/home`);
@@ -191,7 +186,6 @@ function FormSale() {
 
 
   const [images, setImages] = useState('/assets/img/icon/picture.jpg')
-
   const heandlePlus = (id) => {
     axios.get(api + `order/pluscart/${id}`).then(function (resp) {
       if (resp.status === 200) {
@@ -248,8 +242,6 @@ function FormSale() {
   const [itemcart, setItemCart] = useState([]);
   const [totalBalance, setTotalBalance] = useState(0);
   const [totalPattern, setTotalPattern] = useState(0);
-  const [balanceTotal, setBalanceTotal] = useState(0)
-
   const [totalBalancePay, setTotalBalancePay] = useState(0)
 
   const fetchItemCart = async () => {
@@ -279,7 +271,6 @@ function FormSale() {
       const bnPattern = jsonData.reduce((acc, val) => acc + parseFloat(val.price_pattern * val.order_qty * val.qty_baht), 0);
       setTotalBalance(balance);
       setTotalPattern(bnPattern);
-      setBalanceTotal(balance + bnPattern);
       setTotalBalancePay(balance + bnPattern);
 
       setOrder(prevOrder => ({
@@ -300,189 +291,29 @@ function FormSale() {
 
   //=============================
 
-  const [order, setOrder] = useState({
-    user_id_fk: userId,
-    staff_id_fk: staffId,
-    branch_id_fk: barnchId,
-    customId: '',
-    bill_shop: '',
-    cus_fname: '',
-    cus_lname: '',
-    cus_tel: '',
-    cus_address: '',
-    cus_remark: '',
-    sale_remark: '',
-    balance_total: '0',
-    total_grams: '0',
-    balance_cash: '0',
-    balance_transfer: '0',
-    balance_payment: '0',
-    balance_return: '0',
-    currency_id_fk: 22001,
-    rate_price: 1,
-    balance_totalpay: 0,
-    items: []
-  });
   const [search, setSearch] = useState(false)
 
-  const handleChange = (name, value) => {
-    setOrder({
-      ...order, [name]: value
-    })
-    if (name === 'cus_tel' && value) {
-      setSearch(true);
-      setItemCust([])
-    } else {
-      setSearch(false);
-    }
-    setDatacust({
-      cusTel: value
-    });
-  }
+  // const handleChange = (name, value) => {
+  //   setOrder({
+  //     ...order, [name]: value
+  //   })
+
+  //   if (name === 'cus_tel' && value) {
+  //     setSearch(true);
+  //     setItemCust([])
+  //   } else {
+  //     setSearch(false);
+  //   }
+  //   setDatacust({
+  //     cusTel: value
+  //   });
+  // }
 
 
   //==================== ບັນທຶກການຈ່າຍ
   const [print, setPrint] = useState(false);
   const [invoice, setInvoice] = useState('');
 
-  const handlePayment = () => {
-    axios.post(api + 'order/payment', order).then(function (res) {
-      if (res.status === 200) {
-        setStaffId('');
-        setInvoice(res.data.id);
-        setData({
-          first_name: '',
-          last_name: '',
-          staff_uuid: '',
-          id_code: '',
-        })
-        setItemCart([])
-        setShowPay(false);
-        setOrder({
-          bill_shop: '',
-          alance_total: '0',
-          total_grams: '0',
-          balance_cash: '0',
-          balance_transfer: '0',
-          balance_payment: '0',
-          balance_return: '0',
-          rate_price: 1,
-          balance_totalpay: 0,
-          currency_id_fk: 22001,
-        })
-        setBalanceReturn(0);
-        setPrint(true);
-        setShowBill(true)
-      } else {
-        showMessage(res.data.message, 'error');
-      }
-    }).catch(function () {
-      Alert.errorData('ການດຳເນິນງານບໍ່ສຳເລັດ')
-    });
-  }
-
-  //==========================
-  const [balanceCash, setBalanceCash] = useState(0);
-  const [balanceTransfer, setBalanceTransfer] = useState(0);
-  const [balanceReturn, setBalanceReturn] = useState(0);
-  const [ratePrice, setRatePrice] = useState(1)
-  // const balancePayment = balanceCash + balanceTransfer;
-  // const [balancePayment, setBalancePayment] = useState(0); // Assuming this is set elsewhere in your code
-
-
-  const handleCashChange = (name, value) => {
-    const newAmount = parseFloat(value.replace(/,/g, ''));
-    setBalanceCash(isNaN(newAmount) ? 0 : newAmount);
-
-    // setBalancePayment(newAmount + parseFloat(balanceTransfer));
-
-    if ((newAmount + balanceTransfer) > totalBalancePay) {
-      setBalanceReturn((newAmount + balanceTransfer) - totalBalancePay);
-    } else {
-      setBalanceReturn(0);
-    }
-
-    if (newAmount >= totalBalancePay) {
-      setBalanceTransfer(0);
-      setCheckOnly('readOnly');
-      setOrder(prevOrder => ({
-        ...prevOrder, balance_transfer: 0,
-      }));
-    } else {
-      setCheckOnly('');
-    }
-
-    setOrder(prevOrder => ({
-      ...prevOrder, [name]: value,
-    }));
-  };
-
-
-  //================
-  const handleTransferChange = (name, value) => {
-    const newTransfer = parseFloat(value.replace(/,/g, ''));
-    setBalanceTransfer(isNaN(newTransfer) ? 0 : parseInt(newTransfer));
-    // setBalancePayment(newTransfer + parseFloat(balanceCash));
-    if (newTransfer + parseFloat(balanceCash) > totalBalancePay) {
-      setBalanceReturn(newTransfer + parseFloat(balanceCash) - totalBalancePay);
-    } else {
-      setBalanceReturn(0);
-    }
-
-    setOrder({
-      ...order, [name]: value
-    });
-  };
-  //============= search customer 
-  const [datacust, setDatacust] = useState({
-    cusTel: ''
-  })
-
-  const [activeShow, setActiveShow] = useState('');
-  const [itemCust, setItemCust] = useState([]);
-  const handleSearchCust = async () => {
-    try {
-      const response = await axios.post(api + 'customer/search/', datacust);
-      const jsonData = response.data;
-      setItemCust(jsonData);
-      if (jsonData.length > 0) {
-        setActiveShow('show')
-      } else {
-        setActiveShow('');
-        setOrder({
-          ...order,
-          customId: '',
-          cus_fname: '',
-          cus_lname: '',
-          cus_tel: '',
-          cus_address: '',
-        });
-      }
-    } catch (error) {
-      setOrder({
-        ...order,
-        customId: '',
-        cus_fname: '',
-        cus_lname: '',
-        cus_tel: '',
-        cus_address: '',
-      });
-      console.error('Error fetching data:', error);
-    }
-  };
-
-
-  const handleUsecust = (item) => {
-    setOrder({
-      ...order,
-      customId: item.cus_uuid,
-      cus_fname: item.cus_fname,
-      cus_lname: item.cus_lname,
-      cus_tel: item.cus_tel,
-      cus_address: item.cus_address,
-    });
-    setActiveShow('')
-  }
 
   // ===================== \\
 
@@ -496,7 +327,6 @@ function FormSale() {
     toaster.push(message, { placement: 'topEnd' });
   };
 
-  const [checkOnly, setCheckOnly] = useState('');
   //====================
   const [showView, setShowView] = useState(false);
   const modalView = (index) => {
@@ -530,35 +360,6 @@ function FormSale() {
   }
 
 
-  //=============== ນຳໃຊ້ເລດເງິນ 
-  const [isInline] = useMediaQuery('xl');
-  const [activeRate, setActiveRate] = useState(22001);
-  const [currencyName, setCurrencyName] = useState('LA');
-  const [genus, setGenus] = useState('₭');
-  const handleRateChange = (newValue) => {
-    setActiveRate(newValue);
-    const useRate = dataList.find(item => item.currency_id === newValue);
-    if (useRate) {
-      const updatedTotalBalancePay = balanceTotal / useRate.reate_price;
-      setTotalBalancePay(updatedTotalBalancePay);
-      setGenus(useRate.genus);
-      setCurrencyName(useRate.currency_name);
-      setRatePrice(useRate.reate_price)
-      setOrder({
-        ...order, currency_id_fk: newValue,
-        rate_price: useRate.reate_price,
-        balance_totalpay: updatedTotalBalancePay,
-        balance_cash: 0,
-        balance_transfer: 0,
-        balance_return: 0
-      });
-
-      setBalanceReturn(0)
-      setBalanceTransfer(0)
-      setBalanceCash(0)
-    }
-
-  };
   const itemcartOrder = useRef();
   const [isPrintVisible, setPrintVisible] = useState(false);
 
@@ -648,7 +449,6 @@ function FormSale() {
                     </div>
                   )}
                 </div>
-
               </div>
             </div>
             <div className="pos-sidebar">
@@ -793,7 +593,7 @@ function FormSale() {
       </div>
 
 
-      {print && (
+      {/* {print && (
         <div id="printableArea">
           <Invoice
             show={showBill}
@@ -802,7 +602,8 @@ function FormSale() {
             showStaff={() => setShowStaff(true)}
             fetchChart={fetchItemCart} />
         </div>
-      )}
+      )} */}
+      
       {isPrintVisible === true && (
         <PrintBillTest
           ref={itemcartOrder}
@@ -850,152 +651,15 @@ function FormSale() {
         {/* )} */}
       </Modal>
 
-      <Modal show={showpay} size='xl' backdrop="static" className='modal-pos' centered  >
-        <Modal.Body className='p-0'>
-          <>
-            <a href="javascript:;" onClick={() => handleGetSale(false)} className="btn-close position-absolute top-0 end-0 m-4" />
-            <div className="modal-pos-product">
-              <div className="modal-pos-product-img p-3 border-end border-2">
-                <div className="fs-4 fw-bold"><i className="fa-solid fa-users me-2 text-danger"></i> ຂໍ້ມູນລູກຄ້າ</div>
-                <hr className='mt-2' />
-                <div className="row">
-                  <div className="col-sm-12 mb-2">
-                    <div className="from-groupmb-4" >
-                      <label htmlFor="" className='form-label fs-14px'>ເບີໂທລະສັບ</label>
-                      <InputGroup>
-                        <Input type="tel" className='' value={order.cus_tel} onChange={(e) => handleChange('cus_tel', e)} name='cus_tel' placeholder='ເບໂທລະສັບ' />
-                        {search && (
-                          <InputGroup.Button onClick={handleSearchCust}>
-                            <i className="fas fa-search"></i>
-                          </InputGroup.Button>
-                        )}
-                      </InputGroup>
-                      <ul className={`dropdown-menu dropdown-menu-end ${activeShow}`}>
-                        {
-                          itemCust.length > 0 ? (
-                            itemCust.map((role, key) => (
-                              <li role='button' key={key} onClick={() => handleUsecust(role)} className='dropdown-item text-h-red'><i className="fa-solid fa-phone"></i> : {role.cus_tel} / {role.cus_fname + ' ' + role.cus_lname}</li>
-                            ))
-                          ) : ('')}
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="col-sm-6 col-6 mb-2">
-                    <div className="from-groupmb-4">
-                      <label htmlFor="" className='form-label fs-14px'>ຊື່ລູກຄ້າ</label>
-                      <Input type="text" className='' value={order.cus_fname} onChange={(e) => handleChange('cus_fname', e)} name='cus_fname' placeholder='ຊື່ລູກຄ້າ' />
-                    </div>
-                  </div>
-                  <div className="col-sm-6 col-6 mb-2">
-                    <div className="from-groupmb-4">
-                      <label htmlFor="" className='form-label fs-14px'>ນາມສະກຸນ</label>
-                      <Input type="text" className='' value={order.cus_lname} onChange={(e) => handleChange('cus_lname', e)} name='cus_lname' placeholder='ນາມສະກຸນ' />
-                    </div>
-                  </div>
-                  <div className="col-sm-12 mb-2">
-                    <div className="from-groupmb-4">
-                      <label htmlFor="" className='form-label fs-14px'>ທີ່ຢູ່ປະຈຸບັນ</label>
-                      <Input className='py-3  fs-14px' value={order.cus_address} onChange={(e) => handleChange('cus_address', e)} name="cus_address" placeholder='ທີ່ຢູ່ປະຈຸບັນ' />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="modal-pos-product-info">
-                <RadioTileGroup defaultValue={activeRate} inline={isInline} onChange={handleRateChange} aria-label="1" className='py-1 my-1'>
-                  {dataList.map((rete, key) =>
-                    <RadioTile icon={<img src={`./assets/img/flag/${rete.currency_icon}`} className='w-30px' />} label={rete.currency_name + ' (' + rete.genus + ')'} value={rete.currency_id} className='py-1 '>
-                      {numeral(rete.reate_price).format('0,00')}
-                    </RadioTile>
-                  )}
-                </RadioTileGroup>
-                <hr className='mt-1' />
-                <div className="option-list mb-2">
-                  <div className="table-responsive w-100">
-                    <table className='table text-nowrap w-100'>
-                      <body>
-                        {itemcart.map((val, index) =>
-                          <tr>
-                            <td className='text-center' width={'2%'}>{index + 1} </td>
-                            <td width={'3%'} className='with-img dt-type-numeric'>
-                              <img src={val.file_image !== '' ? img + 'pos/' + val.file_image : 'assets/img/icon/picture.jpg'} className='rounded h-30px my-n1 mx-n1' alt="" />
-                            </td>
-                            <td>{val.tile_name + ' ' + val.qty_baht + '  ' + val.option_name} {val.qty_add > 0 ? (<span className='text-green'>+ {val.qty_add}</span>) : ('')}</td>
-                            <td>{val.order_qty + ' / ' + val.unite_name}</td>
-                            <td className='text-end'>{(val.qty_baht * val.qty_grams)} g</td>
-                            <td className='text-end'>+ {numeral(val.price_pattern * val.order_qty * val.qty_baht).format('0,00')}</td>
-                            <td className='text-end'> {numeral(
-                              (val.price_sale * (val.qty_add > 0 ? val.grams_add : val.qty_grams) * val.order_qty) +
-                              (val.price_pattern * val.order_qty * val.qty_baht)
-                            ).format('0,00')}</td>
-                          </tr>
-                        )}
-                        <tr className='fs-16px'>
-                          <td colSpan={4} className='text-end'>ລວມຍອດທັງໝົດ :</td>
-                          <td className='text-end text-danger'>{itemcart.reduce((acc, val) => acc + parseFloat((val.qty_add > 0 ? val.grams_add : val.qty_grams) * val.order_qty), 0)} g</td>
-                          <td colSpan={2} className='text-end text-gold bg-black'>{numeral(totalBalance + totalPattern).format('0,00')} ₭</td>
-                        </tr>
-                        {activeRate !== 22001 && (
-                          <tr>
-                            <td colSpan={4} className='text-end fs-16px'>ຍອດເງິນທີ່ຕ້ອງຈ່າຍ ({currencyName}):</td>
-                            <td></td>
-                            <td colSpan={2} className='text-end text-gold bg-vk fs-18px'>{numeral(totalBalancePay).format('0,00.00')} {genus}</td>
-                          </tr>
-                        )}
-                      </body>
-                    </table>
-                  </div>
-                </div>
-                <div className="row fs-16px">
-                  <div className="col-sm-6 col-6 mb-2">
-                    <label htmlFor="" className='form-label'>ຮັບເງິນສົດ </label>
-                    <InputGroup inside className='bg-lime-100'>
-                      <Input type='tel' size='lg' value={numeral(order.balance_cash).format('0,00')} onChange={(e) => handleCashChange('balance_cash', e)} className='bg-lime-100' placeholder='0.00' />
-                      <InputGroup.Addon> {genus}</InputGroup.Addon>
-                    </InputGroup>
-                  </div>
-                  <div className="col-sm-6 col-6 mb-2">
-                    <label htmlFor="" className='form-label'>ຮັບເງິນໂອນ</label>
-                    <InputGroup inside className='bg-lime-100'>
-                      <Input type='tel' size='lg' value={numeral(order.balance_transfer).format('0,00')} onChange={(e) => handleTransferChange('balance_transfer', e)} className='bg-lime-100' readOnly={checkOnly} placeholder='0.00' />
-                      <InputGroup.Addon> {genus}</InputGroup.Addon>
-                    </InputGroup>
-                  </div>
-                  <div className="col-sm-8 col-6 mb-2">
-                    {/* <input type="text" value={order.balance_payment } className='hide' /> */}
-                    <label htmlFor="" className='form-label'>ເງິນທອນ</label>
-                    <InputGroup inside className='bg-orange-100'>
-                      <Input size='lg' value={numeral(order.balance_return = (balanceReturn * ratePrice)).format('0,00')} placeholder='0.00' className='bg-orange-100' readOnly />
-                      <InputGroup.Addon> ₭</InputGroup.Addon>
-                    </InputGroup>
-                  </div>
-                  <div className="col-sm-4 col-6 mb-2 text-center">
-                    <label htmlFor="" className='form-label'>ບິນຮ້ານ</label>
-                    <Input size='lg' onChange={(e) => handleChange('bill_shop', e)} placeholder='0x-xxxx' className='bg-dark text-center text-white' />
-                  </div>
-                  <div className="col-sm-12">
-                    <label htmlFor="" className='form-label'>ໝາຍເຫດ</label>
-                    <input type="text" value={order.total_grams = itemcart.reduce((acc, val) => acc + parseFloat(val.qty_grams * val.order_qty), 0)} className='hide' />
-                    <Input name="sale_remark" onChange={(e) => handleChange('sale_remark', e)} id="" className='fs-14px py-3' placeholder='ໝາຍເຫດ' />
-                  </div>
-                </div>
-                <hr />
-                <div className="row gx-3">
-                  <div className="col-4">
-                    <button type='button' onClick={() => handleGetSale(false)} className="btn btn-danger w-100 fs-14px rounded-3 fw-bold mb-0 d-block py-3"  >
-                      <i className="fa-solid fa-rotate-left"></i> ຍົກເລິກ
-                    </button>
-                  </div>
-                  <div className="col-8">
-                    <button type='submit' onClick={handlePayment} className="btn btn-green w-100 fs-14px rounded-3 fw-bold d-flex justify-content-center align-items-center py-3 m-0">
-                      ບັນທຶກຂາຍ <i className="fa fa-check ms-3" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </>
-        </Modal.Body>
-      </Modal>
+        <FromPayment 
+        show={showpay}
+        handleClose={()=>setShowPay(false)}
+        staffId={staffId}
+        datacart={itemcart}
+        balanceTotal={totalBalancePay}
+        fetchChart={fetchItemCart}
+        showStaff={() => setShowStaff(true)}
+        />
 
       <ModalOrder
         dataps={dataps}

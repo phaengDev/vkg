@@ -7,6 +7,7 @@ function PolicyShop() {
     const [show, setShow] = useState(false);
     const addItemPolicy = () => {
         setShow(true)
+        setData('')
     }
 
     const [itemPolicy, setItemPolicy] = useState([]);
@@ -25,6 +26,13 @@ function PolicyShop() {
         setData(data);
         setShow(true)
     }
+
+
+    const handleDelete = async (id) => {
+        
+    }
+
+
     useEffect(() => {
         fetchPolicy()
     }, [])
@@ -41,13 +49,18 @@ function PolicyShop() {
                     <div class="accordion-item border-0">
                         <div class="accordion-header" id="headingOne">
                             <button class="accordion-button bg-vk text-white px-3 py-10px pointer-cursor fs-16px" type="button" data-bs-toggle="collapse" data-bs-target={`#collapseOne-${item.policy_id}`}>
-                              <div>  <i class="fa fa-circle fa-fw text-white me-2 fs-8px"></i> {index+1}. {item.policy_name}</div> <div className='float-end' role='button' onClick={()=>handleEdit(item)}>dd</div>
+                                <div>  <i class="fa fa-circle fa-fw text-white me-2 fs-8px"></i> {index + 1}. {item.policy_name}</div>
                             </button>
                         </div>
-                        <div id={`collapseOne-${item.policy_id}`} className={`accordion-collapse collapse ${index===0 && 'show'}`} data-bs-parent={`#accordion-${item.policy_id}`}>
+                        <div id={`collapseOne-${item.policy_id}`} className={`accordion-collapse collapse ${index === 0 && 'show'}`} data-bs-parent={`#accordion-${item.policy_id}`}>
                             <div class="accordion-body">
-                            <div dangerouslySetInnerHTML={{ __html: item.policy_detail }} />
+                                <div dangerouslySetInnerHTML={{ __html: item.policy_detail }} />
                             </div>
+                            <div className='float-end fs-16px p-3'>
+                                <button type='button' className='btn btn-success btn-xs' role='button' onClick={() => handleEdit(item)}>edit</button>
+                                <button type='button' className='btn btn-danger btn-xs ms-2' role='button' onClick={() => handleDelete(item.policy_id)}>delete</button>
+                            </div>
+
                         </div>
                     </div>
                 ))}
