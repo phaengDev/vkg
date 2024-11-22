@@ -43,9 +43,6 @@ function ReportBillsale() {
         }
     }
 
-
-
-
     const Filter = (event) => {
         setItemData(filterName.filter(n => n.sale_billNo.toLowerCase().includes(event)))
     }

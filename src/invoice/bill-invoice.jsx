@@ -58,9 +58,6 @@ const Invoice = ({ show, handleClose,showStaff,fetchChart, invoice }) => {
                         <i class="fa-solid fa-circle-xmark fs-2 text-red" />
                     </div>
 
-
-
-
                     <div ref={componentRef}>
                         <div id='printableArea' class="receipt">
                             <header>

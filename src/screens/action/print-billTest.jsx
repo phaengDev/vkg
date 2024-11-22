@@ -3,13 +3,10 @@ import numeral from 'numeral';
 import moment from 'moment';
 const PrintBillTest = React.forwardRef(({ data, cartData }, ref) => {
     const username = localStorage.getItem('username')
-
     const [totalBalance, setTotalBalance] = useState(0);
     const [totalPattern, setTotalPattern] = useState(0);
     const [balanceTotal, setBalanceTotal] = useState(0)
-
     const [totalBalancePay, setTotalBalancePay] = useState(0)
-
     useEffect(() => {
         const balance = cartData.reduce((acc, val) => {
             const quantity = val.qty_add > 0 ? val.grams_add : val.qty_grams * val.order_qty;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
-import { SelectPicker, Input, DatePicker, InputGroup, Button, Tooltip, Whisper, Modal, Placeholder } from 'rsuite';
+import { SelectPicker, Input, DatePicker, InputGroup, Button, Tooltip, Whisper, Modal, Placeholder ,Loader} from 'rsuite';
 import { useStaff, useTitle, useZone } from '../../utils/selectOption';
 import axios from 'axios';
 import moment from 'moment';
@@ -50,26 +50,36 @@ export default function CancleSale() {
   const [itemlis, setItemlis] = useState([]);
   const [qty, setQty] = useState(0);
   const [datacheck, setDatacheck] = useState(false);
+  const [loading, setLoading] = useState(false);
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post(api + 'order/bill', formData)
-      .then(function (res) {
-        if (res.status === 200) {
-          // console.log(res.data.itemdata.sale_uuid)
-          setData(res.data.itemdata)
-          setItemlis(res.data.itemlist)
-          setQty(res.data.itemlist.length);
-          setDatacheck(true);
-          setBillUuid(res.data.itemdata.sale_uuid)
-        }
-      }).catch(function () {
-        setDatacheck(null);
-      })
+    setLoading(true);
+    try {
+      axios.post(api + 'order/bill', formData)
+        .then(function (res) {
+          if (res.status === 200) {
+            // console.log(res.data.itemdata.sale_uuid)
+            setData(res.data.itemdata)
+            setItemlis(res.data.itemlist)
+            setQty(res.data.itemlist.length);
+            setDatacheck(true);
+            setBillUuid(res.data.itemdata.sale_uuid)
+          }
+        }).catch(function () {
+          setDatacheck(null);
+        })
+
+    } finally {
+      setLoading(false);
+    }
   }
+
+
+
   let rowCount = 0;
-  if (qty < 3) {
-    rowCount = 3;
-  } else if (qty >= 3) {
+  if (qty < 4) {
+    rowCount = 4;
+  } else if (qty >= 4) {
     rowCount = 2;
   }
   const qtynull = Array.from({ length: rowCount }, (_, index) => index);
@@ -149,22 +159,22 @@ export default function CancleSale() {
     setItemData(filterName.filter(n => n.sale_billNo.toLowerCase().includes(event)))
   }
 
-const [role,setRole]=useState({
-  balance_total:0,
-  balance_cash:0,
-  balance_transfer:0,
-  balance_payment:0,
-  balance_return:0,
-  sale_date:'',
-  sale_can_date:''
-})
+  const [role, setRole] = useState({
+    balance_total: 0,
+    balance_cash: 0,
+    balance_transfer: 0,
+    balance_payment: 0,
+    balance_return: 0,
+    sale_date: '',
+    sale_can_date: ''
+  })
 
 
   const [detail, setDetail] = useState([]);
   const [billNo, setBillNo] = useState('')
   const [billId, setBillId] = useState('')
 
-  const handleView = async (id, Bill,data) => {
+  const handleView = async (id, Bill, data) => {
     setBillNo(Bill);
     setBillId(id);
     try {
@@ -176,13 +186,13 @@ const [role,setRole]=useState({
       console.error('Error fetching data:', error);
     }
     setRole({
-      balance_total:data.balance_total,
-      balance_cash:data.balance_cash,
-      balance_transfer:data.balance_transfer,
-      balance_payment:data.balance_payment,
-      balance_return:data.balance_return,
-      sale_date:data.sale_date,
-      sale_can_date:data.sale_can_date
+      balance_total: data.balance_total,
+      balance_cash: data.balance_cash,
+      balance_transfer: data.balance_transfer,
+      balance_payment: data.balance_payment,
+      balance_return: data.balance_return,
+      sale_date: data.sale_date,
+      sale_can_date: data.sale_can_date
     })
   };
 
@@ -229,15 +239,15 @@ const [role,setRole]=useState({
                     <SelectPicker data={itemStaff} onChange={(e) => handleChangeSearch('staffId', e)} block placeholder="ເລືອກ" />
                   </div>
                   <div className='col-sm-4 col-lg-3'>
-                <label htmlFor="" className='form-label'>ຄົ້ນຫາ</label>
-                <InputGroup inside block>
-                        <InputGroup.Addon>
-                          <i className="fas fa-search"></i>
-                        </InputGroup.Addon>
-                        <Input onChange={(event) => Filter(event)} placeholder='ເລກທີບິນ' />
-                      </InputGroup>
-                {/* <SelectPicker data={datastt} onChange={(e) => handleChange('statusOff', e)} block placeholder="ເລືອກ" /> */}
-              </div>
+                    <label htmlFor="" className='form-label'>ຄົ້ນຫາ</label>
+                    <InputGroup inside block>
+                      <InputGroup.Addon>
+                        <i className="fas fa-search"></i>
+                      </InputGroup.Addon>
+                      <Input onChange={(event) => Filter(event)} placeholder='ເລກທີບິນ' />
+                    </InputGroup>
+                    {/* <SelectPicker data={datastt} onChange={(e) => handleChange('statusOff', e)} block placeholder="ເລືອກ" /> */}
+                  </div>
                   <div className="col-sm-2 col-4 mt-4">
                     <button type="button" onClick={heandleSearch} className="btn btn-danger fs-14px px-3 "><i className="fas fa-search fs-16px"></i> </button>
                     <button type="button" onClick={exportToExcel} className="btn btn-green fs-14px ms-2 px-3 "><i className="fa-solid fa-file-excel fs-16px"></i></button>
@@ -275,12 +285,12 @@ const [role,setRole]=useState({
                                   <td className='text-center'>{key + 1}</td>
                                   <td className='text-center'>{moment(val.sale_date).format('DD/MM/YYYY hh:mm')}</td>
                                   <td className='text-center'>{moment(val.sale_can_date).format('DD/MM/YYYY hh:mm')}</td>
-                                  <td className='text-center'><span role='button' className='text-h-blue' onClick={() => handleView(val.sale_uuid, val.sale_billNo,val)} >{val.sale_billNo}</span> </td>
+                                  <td className='text-center'><span role='button' className='text-h-blue' onClick={() => handleView(val.sale_uuid, val.sale_billNo, val)} >{val.sale_billNo}</span> </td>
                                   <td className='text-end'>{numeral(val.balance_total).format('0,00')}</td>
-                              <td className='text-end'>{numeral(val.balance_cash).format('0,00')}</td>
-                              <td className='text-end'>{numeral(val.balance_transfer).format('0,00')}</td>
-                              <td className='text-end'>{numeral(val.balance_payment).format('0,00')}</td>
-                              <td className='text-end'>{numeral(val.balance_return).format('0,00')}</td>
+                                  <td className='text-end'>{numeral(val.balance_cash).format('0,00')}</td>
+                                  <td className='text-end'>{numeral(val.balance_transfer).format('0,00')}</td>
+                                  <td className='text-end'>{numeral(val.balance_payment).format('0,00')}</td>
+                                  <td className='text-end'>{numeral(val.balance_return).format('0,00')}</td>
                                   <td>{val.first_name + ' ' + val.last_name}</td>
                                   <td>{val.cus_fname + ' ' + val.cus_lname}</td>
                                   <td>{val.cus_tel}</td>
@@ -289,14 +299,14 @@ const [role,setRole]=useState({
                                 </tr>
                               ))}
                               <tr>
-                            <td colSpan={4} className='text-end'>ລວມຍອດທັງໝົດ</td>
-                            <td className='text-end'>{numeral(itemData.reduce((acc, val) => acc + parseFloat(val.balance_total), 0)).format('0,00')}</td>
-                            <td className='text-end'>{numeral(itemData.reduce((acc, val) => acc + parseFloat(val.balance_cash), 0)).format('0,00')}</td>
-                            <td className='text-end'>{numeral(itemData.reduce((acc, val) => acc + parseFloat(val.balance_transfer), 0)).format('0,00')}</td>
-                            <td className='text-end'>{numeral(itemData.reduce((acc, val) => acc + parseFloat(val.balance_payment), 0)).format('0,00')}</td>
-                            <td className='text-end'>{numeral(itemData.reduce((acc, val) => acc + parseFloat(val.balance_return), 0)).format('0,00')}</td>
-                            <td colSpan={5}></td>
-                          </tr>
+                                <td colSpan={4} className='text-end'>ລວມຍອດທັງໝົດ</td>
+                                <td className='text-end'>{numeral(itemData.reduce((acc, val) => acc + parseFloat(val.balance_total), 0)).format('0,00')}</td>
+                                <td className='text-end'>{numeral(itemData.reduce((acc, val) => acc + parseFloat(val.balance_cash), 0)).format('0,00')}</td>
+                                <td className='text-end'>{numeral(itemData.reduce((acc, val) => acc + parseFloat(val.balance_transfer), 0)).format('0,00')}</td>
+                                <td className='text-end'>{numeral(itemData.reduce((acc, val) => acc + parseFloat(val.balance_payment), 0)).format('0,00')}</td>
+                                <td className='text-end'>{numeral(itemData.reduce((acc, val) => acc + parseFloat(val.balance_return), 0)).format('0,00')}</td>
+                                <td colSpan={5}></td>
+                              </tr>
                             </>
                           ) : (
                             <tr>
@@ -316,7 +326,7 @@ const [role,setRole]=useState({
           <div className={`tab-pane fade p-0 ${tabForm}`} id="form-tab">
             <div class="panel">
               <div class="panel-heading">
-                <h4 class="panel-title">ຟອມຍົກເລີກການຂາຍ</h4>
+                <h4 class="panel-title fs-4">ຟອມຍົກເລີກບິນການຂາຍ</h4>
                 <div class="panel-heading-btn">
                   <a href="javascript:;" class="btn btn-xs  btn-danger" onClick={() => headleNewform('show  active', '')} ><i class="fa fa-times"></i></a>
                 </div>
@@ -339,155 +349,165 @@ const [role,setRole]=useState({
                   </form>
                 </div>
                 <div className="col-sm-7">
-                  {datacheck === false ? (
-                    <>
-                      <div className='text-center'>
-                        <img src="./assets/img/icon/000w.png" className='w-25' alt="" />
-                      </div>
-                    </>
-                  ) : datacheck === null ? (
-                    <>
-                      <div className='text-center'>
-                        <img src="./assets/img/icon/error.png" className='w-25' alt="" />
-                        <h5 className='mt-4 text-orange'>ບໍ່ພົບເລກບິນທີ່ທ່ານກຳລັງຊອກຫາ</h5>
-                      </div></>
+               
+                  {loading === true ? (
+                    <div className='text-center text-red'>
+                    <Placeholder.Paragraph rows={8} />
+                    <Loader size='lg' content="ກຳລັງກວດສອບຂໍ້ມູນ....." vertical />
+                    </div>
                   ) : (
+
                     <>
-                      <table width='100%' className='table border-0 fs-16px'>
-                        <tr>
-                          <td colSpan={5} className='text-center border-buttom fs-22px'>ບິນຮັບເງິນສົດ</td>
-                        </tr>
-                        <tr>
-                          <td rowSpan={4} className='text-center border-0 img' width={'20%'}> <img src='./assets/img/logo/logo.png' className='w-75' /></td>
-                          <td colSpan={2} className='border-0'><h4> ຮ້ານຂາຍຄຳ ນາງວຽງຄຳ</h4></td>
-                        </tr>
-                        <tr>
-                          <td colSpan={3} className='border-0'>ສຳນັກງານ ຕະຫຼາດເຊົ້າ</td>
-                        </tr>
-                        <tr>
-                          <td colSpan={3} className='border-0'>ບ້ານ ຫາດສະດິ, ເມືອງຈັດທະບູລີ,ນະຄອນຫຼວງວຽງຈັນ</td>
-                        </tr>
-                        <tr>
-                          <td colSpan={3} className='border-0'>ໂທລະສັບ: 20 95 555 609  -{qty}</td>
-                        </tr>
-                        <tr>
-                          <td className='border-0' width={'50%'} colSpan={2}>
-                            <h5>ຊື່ລູກຄ້າ: {data.customeName}</h5>
-                            ເບີໂທລະສັບ: {data.cus_tel}
-                          </td>
-                          <td className='text-end border-0' >
-                            <h5 >Bill No:{data.sale_billNo}</h5>
-                            Date: {moment(data.sale_billNo).format('DD/MM/YYYY hh:ss')}</td>
-                        </tr>
-                      </table>
-                      <div className="table-responsive">
-                        <table className='table table-bordered align-middle w-100 text-nowrap table-gold'>
-                          <thead className='thead-plc'>
+
+                      {datacheck === false ? (
+                        <>
+                          <div className='text-center'>
+                            <img src="./assets/img/icon/000w.png" className='w-25' alt="" />
+                          </div>
+                        </>
+                      ) : datacheck === null ? (
+                        <>
+                          <div className='text-center'>
+                            <img src="./assets/img/icon/error.png" className='w-25' alt="" />
+                            <h5 className='mt-4 text-orange'>ບໍ່ພົບເລກບິນທີ່ທ່ານກຳລັງຊອກຫາ</h5>
+                          </div></>
+                      ) : (
+                        <>
+                          <table width='100%' className='table border-0 fs-16px'>
                             <tr>
-                              <th className='text-center'>ລ/ດ</th>
-                              <th>ລາຍການ</th>
-                              <th className='text-center'>ນ້ຳໜັກ</th>
-                              <th className='text-center'>ຈຳນວນ</th>
-                              <th className='text-end'>ລາຄາ ຊື້-ຂາຍ</th>
-                              <th className='text-end'>ຄ່າລາຍ</th>
-                              <th className='text-end'>ເປັນເງິນ</th>
-                              <th>ໂຊນຂາຍ</th>
+                              <td colSpan={5} className='text-center border-buttom fs-22px'>ບິນຮັບເງິນສົດ</td>
                             </tr>
-                          </thead>
-                          <tbody>
-                            {itemlis.map((item, key) => (
+                            <tr>
+                              <td rowSpan={4} className='text-center border-0 img' width={'20%'}> <img src='./assets/img/logo/logo.png' className='w-75' /></td>
+                              <td colSpan={2} className='border-0'><h4> ຮ້ານຂາຍຄຳ ນາງວຽງຄຳ</h4></td>
+                            </tr>
+                            <tr>
+                              <td colSpan={3} className='border-0'>ສຳນັກງານ ຕະຫຼາດເຊົ້າ</td>
+                            </tr>
+                            <tr>
+                              <td colSpan={3} className='border-0'>ບ້ານ ຫາດສະດິ, ເມືອງຈັດທະບູລີ,ນະຄອນຫຼວງວຽງຈັນ</td>
+                            </tr>
+                            <tr>
+                              <td colSpan={3} className='border-0'>ໂທລະສັບ: 20 95 555 609 </td>
+                            </tr>
+                            <tr>
+                              <td className='border-0' width={'50%'} colSpan={2}>
+                                <h5>ຊື່ລູກຄ້າ: {data.customeName}</h5>
+                                ເບີໂທລະສັບ: {data.cus_tel}
+                              </td>
+                              <td className='text-end border-0' >
+                                <h5 >Bill No:{data.sale_billNo}</h5>
+                                Date: {moment(data.sale_date).format('DD/MM/YYYY hh:ss')}
+                                <div className='text-red'>ພະນັກງານຂາຍ : {data.first_name} {data.last_name}</div>
+                              </td>
+                            </tr>
+                          </table>
+                          <div className="table-responsive">
+                            <table className='table table-bordered align-middle w-100 text-nowrap table-gold'>
+                              <thead className='thead-plc'>
+                                <tr>
+                                  <th className='text-center'>ລ/ດ</th>
+                                  <th>ລາຍການ</th>
+                                  <th className='text-center'>ຈຳນວນ</th>
+                                  <th className='text-end'>ລາຄາ ຊື້-ຂາຍ</th>
+                                  <th className='text-end'>ຄ່າລາຍ</th>
+                                  <th className='text-end'>ເປັນເງິນ</th>
+                                  <th>ໂຊນຂາຍ</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {itemlis.map((item, key) => (
+                                  <tr>
+                                    <td className='text-center'>{key + 1}</td>
+                                    <td>{item.tile_name} {item.qty_baht + ' ' + item.option_name}</td>
+                                    <td className='text-center'>{item.order_qty + ' ' + item.unite_name}</td>
+                                    <td className='text-end'>{numeral(item.price_sale).format('0,00')}</td>
+                                    <td className='text-end'>{numeral(item.price_pattern).format('0,00')}</td>
+                                    <td className='text-end'>{numeral(item.balance_total).format('0,00')}</td>
+                                    <td>{item.zone_name}</td>
+                                  </tr>
+                                ))}
+                                {qtynull.map((item, index) => (
+                                  <tr key={index}>
+                                    <td className='text-center'>{qty + index + 1}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                  </tr>
+                                ))}
+
+                              </tbody>
+                            </table>
+                          </div>
+                          <table className='w-100'>
+                            <tr >
+                              <td className='border-1 text-center' width={'33.33%'}>ລວມຍອດເງິນທັງໝົດ
+                                <h5>{numeral(data.balance_total).format('0,00')}  ₭</h5>
+                              </td>
+                              <td className='border-1 text-center' width={'33.33%'}>ລວມຈ່າຍເງິນສົດ
+                                <h5>{numeral(data.balance_cash).format('0,00')} {data.genus}</h5>
+                              </td>
+                              <td className='border-1 text-center' width={'33.33%'}>ລວມຈ່າຍເງິນໂອນ
+                                <h5>{numeral(data.balance_transfer).format('0,00')} {data.genus}</h5>
+                              </td>
+                            </tr>
+                            {data.balance_return > 0 ? (
                               <tr>
-                                <td className='text-center'>{key + 1}</td>
-                                <td>{item.tile_name}</td>
-                                <td className='text-center'>{item.qty_baht + ' ' + item.option_name}</td>
-                                <td className='text-center'>{item.order_qty + ' ' + item.unite_name}</td>
-                                <td className='text-end'>{numeral(item.price_sale).format('0,00')}</td>
-                                <td className='text-end'>{numeral(item.price_pattern).format('0,00')}</td>
-                                <td className='text-end'>{numeral(item.balance_total).format('0,00')}</td>
-                                <td>{item.zone_name}</td>
+                                <td colSpan={3} className='text-end border-1 text-danger'>
+                                  ເງິນທອນ
+                                  <h5 className=''>{numeral(data.balance_return).format('0,00')} ₭</h5>
+                                </td>
                               </tr>
-                            ))}
-                            {qtynull.map((item, index) => (
-                              <tr key={index}>
-                                <td className='text-center'>{qty + index + 1}</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                              </tr>
-                            ))}
+                            ) : ('')}
+                          </table>
 
-                          </tbody>
-                        </table>
-                      </div>
-                      <table className='w-100'>
-                        <tr >
-                          <td className='border-1 text-center' width={'33.33%'}>ລວມຍອດເງິນທັງໝົດ
-                            <h5>{numeral(data.balance_total).format('0,00')}  ₭</h5>
-                          </td>
-                          <td className='border-1 text-center' width={'33.33%'}>ລວມຈ່າຍເງິນສົດ
-                            <h5>{numeral(data.balance_cash).format('0,00')} {data.genus}</h5>
-                          </td>
-                          <td className='border-1 text-center' width={'33.33%'}>ລວມຈ່າຍເງິນໂອນ
-                            <h5>{numeral(data.balance_transfer).format('0,00')} {data.genus}</h5>
-                          </td>
-                        </tr>
-                        {data.balance_return > 0 ? (
-                          <tr>
-                            <td colSpan={3} className='text-end border-1 text-danger'>
-                              ເງິນທອນ
-                              <h5 className=''>{numeral(data.balance_return).format('0,00')} ₭</h5>
-                            </td>
-                          </tr>
-                        ) : ('')}
-                      </table>
-
-                      <div className="row mt-3">
-                        {data.sale_status === 1 && data.status_off_sale === 1 ? 
-                          <>
-                            <div className="col-6 ">
-                              <div className='form-check '>
-                                <input type="checkbox" name="" id="" checked={isChecked} onChange={handleCheckboxChange} className='form-check-input' />
-                                <label class="form-check-label" for="flexCheckDefault">
-                                  <span className='me-3'>ທ່ານຍິນດິທີ່ຈະຍົກເລີກບິນຂາຍນີ້ແທ້ບໍ່ </span>
-                                  <Whisper followCursor className='me-3' speaker={<Tooltip>ກະລຸນາກວດສອບໃຫ້ດິເພາະຍົກເລີກແລ້ວຈະບໍ່ສາມາດກູ້ຄືນໄດ້</Tooltip>}>
-                                    <i class="fa-solid fa-circle-exclamation text-danger "></i>
-                                  </Whisper>
-                                </label>
-                              </div>
-                            </div>
-                            <div className="col-6">
-                              <Button type='button' appearance="primary" onClick={handleCancle} disabled={!isChecked} className='rounded-pill' block> ຢືນຢັນຍົກເລີກ</Button>
-                            </div>
-                          </>
-                        :data.status_off_sale === 2 ? ( 
-                          <>
-                          <div className="col-12 ">
-                          <div class="alert alert-success alert-dismissible fade show">
-                            <i class="fa-solid fa-check fs-4 me-3"></i>
-                            <strong className='fs-18px me-2'>ຂໍອະໄພ!</strong>
-                            ບິນນີ້ໄດ້ມີການປິດຍອດແລ້ວ ບໍ່ສາມາດຍົກເລີກໄດ້ອິກ 
-                            <a href="javascript:;" class="alert-link"> ຂອບໃຈ</a>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                          <div className="row mt-3">
+                            {data.sale_status === 1 && data.status_off_sale === 1 ?
+                              <>
+                                <div className="col-6 ">
+                                  <div className='form-check '>
+                                    <input type="checkbox" name="" id="" checked={isChecked} onChange={handleCheckboxChange} className='form-check-input' />
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                      <span className='me-3'>ທ່ານແນ່ໃຈແລ້ວບໍ່ທີ່ຈະຍົກເລີກບິນຂາຍນີ້ </span>
+                                      <Whisper followCursor className='me-3' speaker={<Tooltip>ກະລຸນາກວດສອບໃຫ້ດິເພາະຍົກເລີກແລ້ວຈະບໍ່ສາມາດກູ້ຄືນໄດ້</Tooltip>}>
+                                        <i class="fa-solid fa-circle-exclamation text-danger "></i>
+                                      </Whisper>
+                                    </label>
+                                  </div>
+                                </div>
+                                <div className="col-6">
+                                  <Button type='button' appearance="primary" onClick={handleCancle} disabled={!isChecked} className='rounded-pill' block> ຢືນຢັນຍົກເລີກ</Button>
+                                </div>
+                              </>
+                              : data.status_off_sale === 2 ? (
+                                <>
+                                  <div className="col-12 ">
+                                    <div class="alert alert-success alert-dismissible fade show">
+                                      <i class="fa-solid fa-check fs-4 me-3"></i>
+                                      <strong className='fs-18px me-2'>ຂໍອະໄພ!</strong>
+                                      ບິນນີ້ໄດ້ມີການປິດຍອດແລ້ວ ບໍ່ສາມາດຍົກເລີກໄດ້ອິກ
+                                      <a href="javascript:;" class="alert-link"> ຂອບໃຈ</a>
+                                      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                    </div>
+                                  </div>
+                                </>
+                              ) : (<div className="col-12 ">
+                                <div class="alert alert-warning alert-dismissible fade show">
+                                  <i class="fa-solid fa-triangle-exclamation fs-4 me-3"></i>
+                                  <strong className='fs-18px me-2'>ຂໍອະໄພ!</strong>
+                                  ບິນນີ້ໄດ້ມີການຍົກເລີກແລ້ວ ບໍ່ສາມາດຍົກເລີກໄດ້ອິກ
+                                  <a href="javascript:;" class="alert-link"> ຂອບໃຈ</a>
+                                  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                              </div>)}
                           </div>
-                        </div>
-                          </>
-                        ):(<div className="col-12 ">
-                          <div class="alert alert-warning alert-dismissible fade show">
-                            <i class="fa-solid fa-triangle-exclamation fs-4 me-3"></i>
-                            <strong className='fs-18px me-2'>ຂໍອະໄພ!</strong>
-                            ບິນນີ້ໄດ້ມີການຍົກເລີກແລ້ວ ບໍ່ສາມາດຍົກເລີກໄດ້ອິກ 
-                            <a href="javascript:;" class="alert-link"> ຂອບໃຈ</a>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                          </div>
-                        </div>)}
-                      </div>
+                        </>
+                      )}
                     </>
                   )}
-
                 </div>
               </div>
             </div>
@@ -522,8 +542,8 @@ const [role,setRole]=useState({
                     <td className='text-center'>{item.qty_baht + ' ' + item.option_name}</td>
                     <td className='text-end'>{numeral(item.price_sale).format('0,00')}</td>
                     <td className='text-center'>{item.order_qty + '/' + item.unite_name}</td>
-                    <td className='text-end'>{numeral((item.order_qty*item.price_pattern)).format('0,00')}</td>
-                    <td className='text-end'>{numeral((item.price_sale*item.order_qty)+(item.order_qty*item.price_pattern)).format('0,00')}</td>
+                    <td className='text-end'>{numeral((item.order_qty * item.price_pattern)).format('0,00')}</td>
+                    <td className='text-end'>{numeral((item.price_sale * item.order_qty) + (item.order_qty * item.price_pattern)).format('0,00')}</td>
                     <td>{item.zone_name}</td>
                     <td>{item.staff_name}</td>
                   </tr>

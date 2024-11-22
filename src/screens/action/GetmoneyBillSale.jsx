@@ -14,7 +14,8 @@ function GetmoneyBillSale() {
     const itemStaff = useStaff();
     const datastt = [
         { data: 1, sttName: 'ຄ້າງຮັບເງິນ' },
-        { data: 2, sttName: 'ຮັບເງິນແລ້ວ' }
+        { data: 2, sttName: 'ຮັບເງິນແລ້ວ' },
+        { data: null, sttName: 'ທັງໝົດ' }
     ].map(
         item => ({ label: item.sttName, value: item.data })
     );
@@ -60,7 +61,6 @@ function GetmoneyBillSale() {
             const jsonData = response.data;
             setItemData(jsonData);
             setFilterName(jsonData);
-
             const res = await axios.post(api + 'payment/balance', values);
             const item = res.data
             setBalance({
@@ -131,6 +131,7 @@ function GetmoneyBillSale() {
     const [show, setShow] = useState(false);
 const handleViewBill = (data) => {
     setShow(true);
+    setBill(data)
 }
 
     useEffect(() => {
@@ -363,7 +364,7 @@ const handleViewBill = (data) => {
                 fetchData={fetchDataReport}
             />
 
-            <BillInvoiceSale show={show} handleClose={() => setShow(false)} />
+            <BillInvoiceSale show={show} handleClose={() => setShow(false)} data={bill} />
         </div>
     )
 }

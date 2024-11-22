@@ -108,32 +108,6 @@ function ReviewsProduct() {
 
                 <div class="col-xl-3 col-sm-4 px-2">
                     <div class="card">
-                        <div className="video-container" style={{ position: 'relative', paddingBottom: '100%', height: 0 }}>
-                            <iframe
-                                src={videoUrl}
-                                style={{
-                                    position: 'absolute',
-                                    top: 0,
-                                    left: 0,
-                                    width: '100%',
-                                    height: '100%',
-                                }}
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                                title="YouTube Video"
-                            />
-                        </div>
-                        <div class="card-body">
-                            <h4 class="card-title">Card title</h4>
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                            <p class="card-text text-gray">Last updated 3 mins ago</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-xl-3 col-sm-4 px-2">
-                    <div class="card">
                         <video width="100%" controls>
                             <source src="./assets/img/pos/461125336_1037480234369568_2468457238090032849_n.mp4"
                                 title="YouTube Video" />
@@ -165,7 +139,6 @@ function ReviewsProduct() {
                             <select className='form-select form-select-lg ' value={values.type_video} onChange={(e) => handleChange('type_video', e.target.value)} >
                                 <option value="1">ເລືອກວິດີໂອ ໃນເຄື່ອງ </option>
                                 <option value="2">ເລືອກວິດີໂອ Facebook</option>
-                                <option value="3">ເລືອກວິດີໂອ YouTube</option>
                             </select>
                         </div>
                         <div className="form-group col-sm-6 px-4 ">
@@ -197,7 +170,7 @@ function ReviewsProduct() {
                                 )
                             ) : (
                                 values.url_link !== '' && (
-                                    values.type_video === '2' ? (
+                                    values.type_video === '2' && (
                                         <>
                                             <iframe
                                                 src={`https://www.facebook.com/plugins/video.php?href=${values.url_link}`}
@@ -207,17 +180,6 @@ function ReviewsProduct() {
                                                 allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
                                             ></iframe>
                                         </>
-                                    ) : (
-                                        <>
-                                            <iframe
-                                                src={`https://www.youtube.com/embed/${values.url_link}`}
-                                                width="100%"
-                                                height="300"
-                                                title="YouTube video player"
-                                                frameBorder="0"
-                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                allowFullScreen
-                                            ></iframe></>
                                     )
                                 )
                             )}

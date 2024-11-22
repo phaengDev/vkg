@@ -37,7 +37,6 @@ function FormRegisterCustom({ open, handleClose, data,fetchData }) {
                         handleClose();
                         fetchData();
                         Notification.success('ຢືນຢັນ',res.data.message);
-
                         setValues({
                             sale_uuid_fk: '',
                             bill_shop: '',

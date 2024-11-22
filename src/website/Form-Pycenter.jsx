@@ -45,13 +45,14 @@ function FormPycenter({ open, handleClose, data, fetchData }) {
         setFiles('')
     };
 
-
+const [loading, setLoading] = useState(false);
     const handleSubmit = async (e) => {
         e.preventDefault();
         const inputData = new FormData();
         for (const key in inputs) {
             inputData.append(key, inputs[key]);
         }
+        setLoading(true);
             try {
                 const response = await axios.post(api + 'pcenter/create', inputData);
                 if (response.status === 200) {
@@ -69,6 +70,9 @@ function FormPycenter({ open, handleClose, data, fetchData }) {
             } catch (error) {
                 console.error('Error inserting data:', error);
                 showMessage('ແຈ້ງເຕືອນ','ອັບໂຫລດພາບບໍ່ສຳເລັດ','orrer');
+            }
+            finally {
+                setLoading(false);
             }
        
     };
@@ -94,9 +98,6 @@ function FormPycenter({ open, handleClose, data, fetchData }) {
         }
 
     }, [data])
-
-
-
     const toaster = useToaster();
     const showMessage = (titleName, messName, notifi) => {
       const message = (
@@ -147,7 +148,7 @@ function FormPycenter({ open, handleClose, data, fetchData }) {
                     </Grid>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button type='submit' appearance="primary"> ບັນທຶກ </Button>
+                    <Button type='submit' appearance="primary" disabled={loading}> {loading ? 'ກຳລັງບັນທຶກ...' : 'ບັນທຶກ'}  </Button>
                     <Button onClick={handleClose} color='red' appearance="primary"> ຍົກເລີກ </Button>
                 </Modal.Footer>
             </form>

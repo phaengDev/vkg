@@ -113,7 +113,7 @@ function CheckBillOnline() {
             <div id="content" class="app-content px-2">
                 <div className="row mb-3">
                     <div className="col-sm-8">
-                        <span className='me-3 fs-20px'>ຟອມບັນທຶກສິນຄ້າ</span>
+                        <span className='me-3 fs-20px'>ລາຍການ ການສັ່ງຊື້ສິນຄ້າທາງອອນໄລນ໌</span>
                     </div>
                     <div className="col-sm-4">
                         <form onSubmit={heandleCheck}>

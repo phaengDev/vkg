@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Modal, Button, Input, SelectPicker, Placeholder } from 'rsuite';
+import { Modal, Button, Input, SelectPicker, Placeholder,InputGroup } from 'rsuite';
 import { Config,Urlimage } from '../../config/connect';
 import axios from 'axios';
 import Swal from "sweetalert2";
@@ -37,19 +37,14 @@ function PorductTile() {
         title_detail:''
     })
 
-
-
     const handleChange = (name, value) => {
         setInputs({
             ...inputs, [name]: value
         });
-
     }
     const handleSubmit = async (e) => {
         e.preventDefault();
         const inputData = new FormData();
-
-
         for (const key in inputs) {
             inputData.append(key, inputs[key]);
         }
@@ -76,7 +71,6 @@ function PorductTile() {
         }
     };
     
-
     const headleEdit = (item) => {
         setInputs({
             tile_id: item.tile_uuid,
@@ -255,8 +249,12 @@ function PorductTile() {
                         <div className="row mb-3">
                             <div className="col-sm-9 fs-20px"> </div>
                             <div className="col-sm-3">
-                                <div className='input-group' >
-                                    <input type='text' className='form-control' onChange={(event) => Filter(event.target.value)} placeholder="ຄົ້ນຫາ" />
+                                <div className='input-group'>
+                                    <InputGroup inside>
+                                    <InputGroup.Addon><i className='fas fa-search'/> </InputGroup.Addon>
+                                    <Input onChange={(event) => Filter(event)} placeholder="ຄົ້ນຫາ"/>
+                                    </InputGroup>
+                                    {/* <input type='text' className='form-control' onChange={(event) => Filter(event.target.value)} placeholder="ຄົ້ນຫາ" /> */}
                                 </div>
                             </div>
                         </div>

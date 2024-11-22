@@ -175,7 +175,7 @@ function ProductsPage() {
     // const [filter, setFilter] = useState('');
     const Filter = (event) => {
         const searchTerm = event.toLowerCase(); // Convert the input to lowercase for case-insensitive comparison
-        setItemProduct(filterName.filter(n => 
+        setItemProduct(filterName.filter(n =>
             n.tile_name.toLowerCase().includes(searchTerm) || // Check if tile_name includes the search term
             n.code_gold.toLowerCase().includes(searchTerm)    // Check if code_gold includes the search term
         ));
@@ -336,17 +336,7 @@ function ProductsPage() {
                 <div className="row">
                     <div className={formAdd === false ? 'col-sm-12' : 'col-sm-8'}>
                         <div className="panel panel-inverse pb-3">
-                            {/* <div className="panel-heading">
-                                <h4 className="panel-title fs-16px">ລາຍການສິນຄ້າ</h4>
-                                <div className="panel-heading-btn">
-                                    {formAdd === true ?
-                                        <a href="javascript:;" className="btn btn-xs btn-icon btn-default" onClick={() => headleAddNew(false)}> <i className="fa fa-expand"></i></a>
-                                        : ''
-                                    }
-                                </div>
-                            </div> */}
                             <div className="panel-body ">
-
                                 <div className="row mb-4">
                                     <div className="col-sm-3 form-group mb-2">
                                         <label htmlFor="" className='form-label'>ຮູບປະພັນ</label>
@@ -409,37 +399,37 @@ function ProductsPage() {
                                                 isLoading === true ? <tr><td colSpan={10}><Placeholder.Grid rows={10} columns={6} active /></td></tr> :
                                                     currentItems.length > 0 ? (
                                                         <>
-                                                        { currentItems.map((item, key) => {
-                                                            const namePs = item.tile_name + ' ( ' + item.qty_baht + '' + item.option_name + ' ) ';
-                                                            return (
-                                                                <tr key={key}>
-                                                                    <td className='text-center' width='1%'>{key + 1}</td>
-                                                                    <td className='text-center with-img dt-type-numeric' width='5%'>
-                                                                        <img src={item.file_image !== '' ? url + 'pos/' + item.file_image : 'assets/img/icon/picture.jpg'} className='rounded h-30px my-n1 mx-n1' role='button' onClick={() => viewImage(item.product_uuid, item.file_image, namePs)} alt="" />
-                                                                    </td>
-                                                                    <td className='text-center'>{item.code_gold}</td>
-                                                                    <td>{item.tile_name}</td>
-                                                                    <td>{item.qty_baht} {item.option_name}</td>
-                                                                    <td className='text-center'>{item.qty_all}</td>
-                                                                    <td>{item.unite_name}</td>
-                                                                    <td>{item.typeName}</td>
-                                                                    <td className='text-center' width='10%'>
-                                                                        <button type='button' onClick={() => handleEdit(item)} className="btn btn-blue btn-xs me-2">
-                                                                            <i className="fa-solid fa-pen-to-square"></i>
-                                                                        </button>
-                                                                        <button type='button' onClick={() => headleDelete(item.product_uuid)} className="btn btn-red btn-xs">
-                                                                            <i className="fa-solid fa-trash"></i>
-                                                                        </button>
-                                                                    </td>
-                                                                </tr>
-                                                            )
-                                                        }) }
-                                                        <tr>
-                                                        <td className='text-end' colSpan={5}>ລວມຈຳນວນທັງໝົດ</td>
-                                                        <td className='text-center'><span className='fs-16px text-red'>{totalQtyBaht} </span> (ຈ/ນ)</td>
-                                                        <td colSpan={3}></td>
-                                                    </tr>
-                                                    </>
+                                                            {currentItems.map((item, key) => {
+                                                                const namePs = item.tile_name + ' ( ' + item.qty_baht + '' + item.option_name + ' ) ';
+                                                                return (
+                                                                    <tr key={key}>
+                                                                        <td className='text-center' width='1%'>{key + 1}</td>
+                                                                        <td className='text-center with-img dt-type-numeric' width='5%'>
+                                                                            <img src={item.file_image !== '' ? url + 'pos/' + item.file_image : 'assets/img/icon/picture.jpg'} className='rounded h-30px my-n1 mx-n1' role='button' onClick={() => viewImage(item.product_uuid, item.file_image, namePs)} alt="" />
+                                                                        </td>
+                                                                        <td className='text-center'>{item.code_gold}</td>
+                                                                        <td>{item.tile_name}</td>
+                                                                        <td>{item.qty_baht} {item.option_name}</td>
+                                                                        <td className='text-center'>{item.qty_all}</td>
+                                                                        <td>{item.unite_name}</td>
+                                                                        <td>{item.typeName}</td>
+                                                                        <td className='text-center' width='10%'>
+                                                                            <button type='button' onClick={() => handleEdit(item)} className="btn btn-blue btn-xs me-2">
+                                                                                <i className="fa-solid fa-pen-to-square"></i>
+                                                                            </button>
+                                                                            <button type='button' onClick={() => headleDelete(item.product_uuid)} className="btn btn-red btn-xs">
+                                                                                <i className="fa-solid fa-trash"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                )
+                                                            })}
+                                                            <tr>
+                                                                <td className='text-end' colSpan={5}>ລວມຈຳນວນທັງໝົດ</td>
+                                                                <td className='text-center'><span className='fs-16px text-red'>{totalQtyBaht} </span> (ຈ/ນ)</td>
+                                                                <td colSpan={3}></td>
+                                                            </tr>
+                                                        </>
                                                     ) : (
                                                         <tr>
                                                             <td colSpan="10" className="text-center text-danger">ບໍ່ມີການບິນທຶກຂໍ້ມູນ</td>
@@ -497,7 +487,6 @@ function ProductsPage() {
                                             <div className="form-group mb-2 col-12">
                                                 <label htmlFor="" className='form-label'>ເລືອກລາຍການສິນຄ້າ</label>
                                                 <Select options={itemTile} value={itemTile.find(obj => obj.value === inputs.tiles_id_fk)} onChange={(e) => handleChange('tiles_id_fk', e.value)} placeholder="ເລືອກສິນຄ້າ" required />
-                                                {/* <SelectPicker name='tiles_id_fk' value={inputs.tiles_id_fk} onChange={(e) => handleChange('tiles_id_fk', e)} data={itemTile} block placeholder="ເລືອກສິນຄ້າ" required /> */}
                                             </div>
 
                                             <div className="form-group mb-2 col-12">
@@ -510,7 +499,11 @@ function ProductsPage() {
                                                 <Select options={itemOption} value={itemOption.find(obj => obj.value === inputs.option_id_fk)} onChange={(e) => handleChange('option_id_fk', e.value)} block placeholder="ເລືອກ" required />
                                                 {/* <SelectPicker name='option_id_fk' value={inputs.option_id_fk} onChange={(e) => handleChange('option_id_fk', e)} data={itemOption} block placeholder="ເລືອກ" required /> */}
                                             </div>
-                                            <div className="pagination row mt-3 p-4">
+                                            <div className="form-group mb-2 col-12">
+                                                <label htmlFor="" className='form-label'>ລາຍລະອຽດ </label>
+                                                <Input as='textarea' onChange={(e) => handleChange('porduct_detail', e)} placeholder='ລາຍລະອຽດ.....' />
+                                            </div>
+                                            <div className="pagination row mt-2 p-4">
                                                 <div className="col-sm-6">
                                                     <button type='reset' className="btn btn-danger block w-100 rounded-pill px-3"><i className="fa-solid fa-rotate"></i> ລ້າງ</button>
                                                 </div>

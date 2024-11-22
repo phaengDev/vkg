@@ -45,7 +45,8 @@ export default function SystemPage() {
         district_id_fk: '',
         village_name: '',
         branch_detail: '',
-        branch_status: ''
+        branch_status: 1,
+        statusUse: 1
     })
     const stts = [
         { label: 'ເປິດໃຊ້ງານ', value: 1 },
@@ -63,6 +64,7 @@ export default function SystemPage() {
             village_name: data.village_name,
             branch_detail: data.branch_detail,
             branch_status: data.branch_status,
+            statusUse: data.statusUse
         })
         setIdistrict(data.district_id_fk);
         showDistrict(data.province_id_fk);
@@ -143,7 +145,8 @@ export default function SystemPage() {
                             district_id_fk: '',
                             village_name: '',
                             branch_detail: '',
-                            branch_status: ''
+                            branch_status: 1,
+                            statusUser: 1
                         });
                         
                     } else {
@@ -293,11 +296,11 @@ export default function SystemPage() {
                                 </div>
                                 <div className="col-sm-8 mb-2">
                                     <label htmlFor="" className='form-label'>ບ້ານ</label>
-                                    <Input defaultValue={inputs.village_name} onChange={(e) => handleChange('village_name', e)} />
+                                    <Input value={inputs.village_name} onChange={(e) => handleChange('village_name', e)} />
                                 </div>
                                 <div className="col-sm-4 mb-2">
                                     <label htmlFor="" className='form-label'>ສະຖານະ</label>
-                                    <Select options={stts} defaultValue={stts.find(obj => obj.value === inputs.branch_status)} onChange={(e) => handleChange('branch_detail', e.value)} />
+                                    <Select options={stts} value={stts.find(obj => obj.value === inputs.statusUse)} onChange={(e) => handleChange('statusUse', e.value)} />
                                 </div>
                                 <div className="col-sm-12 mb-2">
                                     <label htmlFor="" className='form-label'>ລາຍລະອຽດ</label>

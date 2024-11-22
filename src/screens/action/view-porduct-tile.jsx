@@ -6,6 +6,7 @@ import { useOption, useType } from '../../utils/selectOption';
 import { Config, Urlimage } from '../../config/connect';
 import axios from 'axios';
 import Alert from '../../utils/config';
+import Swal from 'sweetalert2';
 export default function ViewPorductTile() {
     const api = Config.urlApi;
     const url = Urlimage.url;
@@ -98,9 +99,31 @@ export default function ViewPorductTile() {
     }
     // ================ delete ============ 
     const headleDelete = (id) => {
-
+        Swal.fire({
+            title: "ຢືນຢັນ?",
+            text: "ທ່ານຕ້ອງການລົບຂໍ້ມູນນີ້ແທ້ບໍ່!",
+            icon: "warning",
+            width: 400,
+            showDenyButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "ຕົກລົງ",
+            denyButtonText: `ຍົກເລີກ`
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(api + `posd/${id}`).then(function (response) {
+                    if (response.status === 200) {
+                        fetchPorduct();
+                        Alert.successData(response.data.message)
+                    } else {
+                        Alert.errorData(response.data.message)
+                    }
+                }).catch((error) => {
+                    Alert.errorData('ການລົບຂໍ້ມູນບໍ່ສຳເລັດ ຂໍ້ມູນອາດມິການໃຊ້ງານຢູ່', error)
+                });
+            }
+        });
     }
-
 
 
     // ==============================
@@ -272,8 +295,6 @@ export default function ViewPorductTile() {
                                         <label htmlFor="" className='form-label'>ຮູບປະພັນ</label>
                                         <SelectPicker data={itemType} onChange={(e) => changeSeaerch('type_id_fk', e)} block placeholder="ເລືອກ" />
                                     </div>
-
-                                  
                                     <div className="col-sm-3 col-8 form-group mb-2">
                                         <label htmlFor="" className='form-label'>ຫົວໜ່ວຍນ້ຳໜັກ</label>
                                         <SelectPicker data={itemOption} onChange={(e) => changeSeaerch('option_id_fk', e)} block placeholder="ເລືອກ" />
