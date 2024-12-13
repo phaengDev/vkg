@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Input, Message, useToaster, Badge, SelectPicker } from 'rsuite';
 import Select from 'react-select'
 import axios from 'axios';
-import { Config,Urlimage } from '../../config/connect';
+import { Config, Urlimage } from '../../config/connect';
 import { useOption, useType, useTitle } from '../../utils/selectOption';
 import numeral from 'numeral';
 import Swal from 'sweetalert2';
@@ -27,7 +27,7 @@ export default function PatternPage() {
         pattern_name: '',
         pattern_pirce: '0',
         option_id_fk: '',
-        pattern_img:null,
+        pattern_img: null,
     })
     const handleChange = (name, value) => {
         setInputs({
@@ -57,7 +57,7 @@ export default function PatternPage() {
                             pattern_name: '',
                             pattern_pirce: '0',
                             option_id_fk: '',
-                            pattern_img:null
+                            pattern_img: null
                         });
                         fetchData();
                         setImageUrl('assets/img/icon/camera.png');
@@ -82,7 +82,7 @@ export default function PatternPage() {
             option_id_fk: item.option_id_fk,
         })
         if (item.pattern_img) {
-            setImageUrl(url + 'pos/' + item.pattern_img);
+            setImageUrl(url + 'pattern/' + item.pattern_img);
         } else {
             setImageUrl('assets/img/icon/camera.png')
         }
@@ -100,20 +100,20 @@ export default function PatternPage() {
             cancelButtonColor: "#d33",
             confirmButtonText: "ຕົກລົງ",
             denyButtonText: `ຍົກເລີກ`
-          }).then((result) => {
+        }).then((result) => {
             if (result.isConfirmed) {
-              axios.delete(api + `pattern/${id}`).then(function (response) {
-                if (response.status === 200) {
-                    fetchData();
-                  Alert.successData(response.data.message)
-                } else {
-                  Alert.errorData(response.data.message)
-                }
-              }).catch((error) => {
-                Alert.errorData('ການລົບຂໍ້ມູນບໍ່ສຳເລັດ ຂໍ້ມູນອາດມິການໃຊ້ງານຢູ່', error)
-              });
+                axios.delete(api + `pattern/${id}`).then(function (response) {
+                    if (response.status === 200) {
+                        fetchData();
+                        Alert.successData(response.data.message)
+                    } else {
+                        Alert.errorData(response.data.message)
+                    }
+                }).catch((error) => {
+                    Alert.errorData('ການລົບຂໍ້ມູນບໍ່ສຳເລັດ ຂໍ້ມູນອາດມິການໃຊ້ງານຢູ່', error)
+                });
             }
-          });
+        });
     }
     // ========================
     const [values, setValues] = useState({
@@ -144,6 +144,67 @@ export default function PatternPage() {
             setIsLoading(false);
         }
     }
+
+
+    //===========================\\
+    const [currentPage, setcurrentPage] = useState(1);
+    const [itemsPerPage, setitemsPerPage] = useState(100);
+    const handleShowLimit = (value) => {
+        setitemsPerPage(value);
+    };
+    const [maxPageNumberLimit, setmaxPageNumberLimit] = useState(5);
+    const [minPageNumberLimit, setminPageNumberLimit] = useState(0);
+
+    const handleClick = (event) => {
+        setcurrentPage(Number(event.target.id));
+        setI(indexOfLastItem + 1)
+    };
+    
+    const pages = [];
+    for (let i = 1; i <= Math.ceil(itemPattern.length / itemsPerPage); i++) {
+        pages.push(i);
+    }
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = itemPattern.slice(indexOfFirstItem, indexOfLastItem);
+
+    const [i, setI] = useState(1);
+    const qtyItem = itemPattern.length;
+    const renderPageNumbers = pages.map((number) => {
+        if (number < maxPageNumberLimit + 1 && number > minPageNumberLimit) {
+            return (
+                <li key={number} className={`page-item ${currentPage === number ? "active" : ''}`} >
+                    <span role="button" id={number} onClick={handleClick} className="page-link border-blue">{number}</span>
+                </li>
+            );
+        } else {
+            <li key={number} className="page-item active" >
+                <span role="button" className="page-link border-blue">1</span>
+            </li>
+        }
+    });
+
+    const handleNextbtn = () => {
+        setcurrentPage(currentPage + 1);
+
+        if (currentPage + 1 > maxPageNumberLimit) {
+            setmaxPageNumberLimit(maxPageNumberLimit + 5);
+            setminPageNumberLimit(minPageNumberLimit + 5);
+        }
+    };
+
+    const handlePrevbtn = () => {
+        setcurrentPage(currentPage - 1);
+        setI(indexOfLastItem - 1)
+
+        if ((currentPage - 1) % 5 === 0) {
+            setmaxPageNumberLimit(maxPageNumberLimit - 5);
+            setminPageNumberLimit(minPageNumberLimit - 5);
+        }
+    };
+    //===========================\\
+
+
 
 
     const [selectedFile, setSelectedFile] = useState(null);
@@ -191,7 +252,6 @@ export default function PatternPage() {
                     <li className="breadcrumb-item active">ລາຍການລວດລາຍ</li>
                 </ol>
                 <h1 className="page-header mb-3">ລາຍການລວດລາຍທັງໝົດ</h1>
-
                 <div className="row">
                     <div className={colrow === false ? 'col-sm-12' : 'col-sm-8'}>
                         <div className="palen">
@@ -243,14 +303,14 @@ export default function PatternPage() {
                                             </thead>
                                             <tbody className=''>
                                                 {
-                                                    itemPattern.length > 0 ? (
-                                                        itemPattern.map((item, key) => (
+                                                    currentItems.length > 0 ? (
+                                                        currentItems.map((item, key) => (
                                                             <tr key={key}>
                                                                 <td className='text-center' width='5%'>{key + 1} </td>
                                                                 <td className='text-center with-img dt-type-numeric' width='5%'>
-                                                                <img src={item.pattern_img && item.pattern_img !== 'null' ? `${url}pattern/${item.pattern_img}`: './assets/img/icon/picture.jpg'} 
-                                                                className='rounded h-30px my-n1 mx-n1' 
-                                                                alt="" />
+                                                                    <img src={item.pattern_img && item.pattern_img !== 'null' ? `${url}pattern/${item.pattern_img}` : './assets/img/icon/picture.jpg'}
+                                                                        className='rounded h-30px my-n1 mx-n1'
+                                                                        alt="" />
                                                                 </td>
                                                                 <td className=''> {item.tile_name} </td>
                                                                 <td>{item.pattern_name}</td>
@@ -274,8 +334,23 @@ export default function PatternPage() {
                                                 }
                                             </tbody>
                                         </table>
-
                                     </div>
+                                    <div className="d-md-flex align-items-center">
+                                            <div className="me-md-auto text-md-left text-center mb-2 mb-md-0">
+                                                ສະແດງ 1 ຫາ {itemsPerPage} ຂອງ {qtyItem} ລາຍການ
+                                            </div>
+                                            <ul className="pagination  mb-0 ms-auto justify-content-center">
+                                                <li className="page-item "><span role="button" onClick={handlePrevbtn} className={`page-link  ${currentPage === pages[0] ? 'disabled' : 'border-blue'}`} >ກອນໜ້າ</span></li>
+                                                {minPageNumberLimit >= 1 ? (
+                                                    <li className="page-item"><span role="button" className="page-link disabled">...</span></li>
+                                                ) : ''}
+                                                {renderPageNumbers}
+                                                {pages.length > maxPageNumberLimit ? (
+                                                    <li className="page-item"><span role="button" className="page-link disabled">...</span></li>
+                                                ) : ''}
+                                                <li className="page-item"><span role="button" onClick={handleNextbtn} className={`page-link  ${currentPage === pages[pages.length - 1] ? 'disabled' : 'border-blue'}`}>ໜ້າຕໍ່ໄປ</span></li>
+                                            </ul>
+                                        </div>
                                 </div>
                             </div>
                         </div>
@@ -304,13 +379,13 @@ export default function PatternPage() {
                                                 <center>
                                                     <div class="h-100px w-100px position-relative">
                                                         <label role='button'>
-                                                        <input type="file" id="fileInput" name='pattern_img' onChange={handleFileChange} accept="image/*" className='hide' />
+                                                            <input type="file" id="fileInput" name='pattern_img' onChange={handleFileChange} accept="image/*" className='hide' />
                                                             <img src={imageUrl} class="w-100px rounded-3" />
                                                         </label>
                                                         {selectedFile && (
-                                                        <span role='button' onClick={handleClearImage} class="w-20px h-20px p-0 d-flex align-items-center justify-content-center badge bg-danger text-white position-absolute end-0 top-0 rounded-pill mt-n2 me-n4">x</span>
+                                                            <span role='button' onClick={handleClearImage} class="w-20px h-20px p-0 d-flex align-items-center justify-content-center badge bg-danger text-white position-absolute end-0 top-0 rounded-pill mt-n2 me-n4">x</span>
                                                         )}
-                                                        </div>
+                                                    </div>
                                                 </center>
                                             </div>
                                             <div className="form-group mb-2">

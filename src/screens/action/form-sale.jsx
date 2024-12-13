@@ -21,7 +21,8 @@ function FormSale() {
  
   const navigate = useNavigate();
   const handleBack = () => {
-    navigate(`/home`);
+window.location.href = '/home';
+    // navigate(`/home`);
   }
 
 
@@ -291,7 +292,7 @@ function FormSale() {
 
   //=============================
 
-  const [search, setSearch] = useState(false)
+  // const [search, setSearch] = useState(false)
 
   // const handleChange = (name, value) => {
   //   setOrder({
@@ -311,8 +312,8 @@ function FormSale() {
 
 
   //==================== ບັນທຶກການຈ່າຍ
-  const [print, setPrint] = useState(false);
-  const [invoice, setInvoice] = useState('');
+  // const [print, setPrint] = useState(false);
+  // const [invoice, setInvoice] = useState('');
 
 
   // ===================== \\

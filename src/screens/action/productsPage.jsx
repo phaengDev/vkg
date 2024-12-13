@@ -195,6 +195,7 @@ function ProductsPage() {
         setcurrentPage(Number(event.target.id));
         setI(indexOfLastItem + 1)
     };
+    
     const pages = [];
     for (let i = 1; i <= Math.ceil(itemPorduct.length / itemsPerPage); i++) {
         pages.push(i);

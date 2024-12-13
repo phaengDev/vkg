@@ -1,10 +1,12 @@
-import React, { useState, useEffect,useRef } from 'react'
-import { Input, InputGroup, DatePicker, SelectPicker, Placeholder } from 'rsuite';
+import React, { useState, useEffect, useRef } from 'react'
+import { Input, InputGroup, DatePicker, Button, Placeholder, InputPicker } from 'rsuite';
 import axios from 'axios';
 import { Config, Urlimage } from '../../config/connect';
 import numeral from 'numeral';
 import moment from 'moment/moment';
 import ViewBillOnline from './View-bill-online';
+import { Notification } from '../../utils/Notifig';
+import Swal from "sweetalert2"; 
 function CheckBillOnline() {
     const api = Config.urlApi;
     const urlimage = Urlimage.url;
@@ -40,7 +42,7 @@ function CheckBillOnline() {
         }
     }
 
-    const handleFilter=(value)=>{
+    const handleFilter = (value) => {
         setItemPaybill(filterName.filter(n => n.pay_sale_code.toLowerCase().includes(value)))
     }
 
@@ -66,15 +68,15 @@ function CheckBillOnline() {
     const [viewData, setViewData] = useState({});
     const [show, setShow] = useState(false);
     const handleView = (data) => {
-        setShow(true)
-        setViewData(data)
+        setShow(true);
+        setViewData(data);
     }
 
     const [idbill, setIdbill] = useState('')
-      const headleSearchBill = (value) => {
-        setIdbill(value)
-      }
-      const heandleCheck = async(e) => {
+    const headleSearchBill = (value) => {
+        setIdbill(value);
+    }
+    const heandleCheck = async (e) => {
         e.preventDefault();
         try {
             const response = await fetch(api + 'paysale/invoice/' + idbill);
@@ -82,12 +84,58 @@ function CheckBillOnline() {
                 throw new Error('Network response was not ok');
             }
             const jsonData = await response.json();
-            setShow(true)
+            setShow(true);
             setViewData(jsonData);
+            setIdbill('');
         } catch (error) {
+            Notification.warning('ບໍ່ພົບຂໍ້ມູນທີ່ທ່ານກຳລັງຊອງຫາ ກະລຸນາກວດຄືນໃຫມ່', 'ຂໍອະໄພ');
             console.error('Error fetching data:', error);
         }
-      }
+    }
+
+
+
+    const handleDelete = (id) => {
+        Swal.fire({
+            title: "ຢືນຢັນ?",
+            text: "ທ່ານແນ່ໃຈແລ້ວບໍາທີ່ຈະລົບຂໍ້ມູນການສັ່ງຊື້ນີ້",
+            icon: "warning",
+            width: 400,
+            showDenyButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "ຕົກລົງ",
+            denyButtonText: `ຍົກເລີກ`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(api + `paysale/delete/${id}`)
+                .then(function (response) {
+                        if (response.status === 200) {
+                            fetchPaybill();
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'ສຳເລັດ!',
+                                width: 400,
+                                text: 'ການລົບຂໍ້ມູນເລັດແລ້ວ',
+                                confirmButtonColor: "#3085d6",
+                            });
+                        }
+                    })
+                    .catch((error) => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'ຜິດພາດ!',
+                            width: 400,
+                            text: 'ມີຂໍ້ຜິດພາດໃນການຢືນຢັນ',
+                            confirmButtonColor: "#d33",
+                        });
+                        console.error('Error:', error);
+                    });
+            }
+        });
+    };
+    
+    
 
 
 
@@ -97,17 +145,19 @@ function CheckBillOnline() {
 
         const handleKeyPress = (e) => {
             if (e.target.tagName !== "INPUT") {
-              const input = inputRef.current;
-              input.focus();
-              input.value = e.key;
-              e.preventDefault();
+                const input = inputRef.current;
+                input.focus();
+                input.value = e.key;
+                e.preventDefault();
             }
-          };
-          document.addEventListener("keypress", handleKeyPress);
-          return () => {
+        };
+        document.addEventListener("keypress", handleKeyPress);
+        return () => {
             document.removeEventListener("keypress", handleKeyPress);
-          };
-    }, [data])
+        };
+    }, [])
+
+
     return (
         <>
             <div id="content" class="app-content px-2">
@@ -117,34 +167,45 @@ function CheckBillOnline() {
                     </div>
                     <div className="col-sm-4">
                         <form onSubmit={heandleCheck}>
-                        <InputGroup inside size='lg'>
-                            <Input size='lg' className='text-center' onChange={(e)=>headleSearchBill(e)} autoFocus placeholder='|||||||||||||||||||||||||' required />
-                            <InputGroup.Button type='submit'>
-                                <i className='fas fa-search' />
-                            </InputGroup.Button>
-                        </InputGroup>
+                            <InputGroup inside size='lg'>
+                                <Input size='lg' className='text-center' onChange={(e) => headleSearchBill(e)} autoFocus placeholder='|||||||||||||||||||||||||' required />
+                                <InputGroup.Button type='submit'>
+                                    <i className='fas fa-search' />
+                                </InputGroup.Button>
+                            </InputGroup>
                         </form>
                     </div>
                 </div>
                 <div className="panel">
                     <div className="panel-body">
                         <div className="row fs-15px mb-2">
-                            <div className="col-sm-3 col-6 mb-2">
-                                <label htmlFor="" className='form-label'>ວັນທິນຳເຂົ້າ</label>
-                                <DatePicker oneTap format="dd/MM/yyyy" value={data.startDate} onChange={(e) => changeReport('startDate', e)} block />
+                            <div className="col-sm-5">
+                                <div className="row">
+                                    <div className="col-sm-6">
+                                        <label htmlFor="" className='form-label'>ວັນທິນຳເຂົ້າ</label>
+                                        <DatePicker oneTap format="dd/MM/yyyy" value={data.startDate} onChange={(e) => changeReport('startDate', e)} block />
+                                    </div>
+                                    <div className="col-sm-6">
+                                        <label htmlFor="" className='form-label'>ຫາວັນທິ</label>
+                                        <DatePicker oneTap format="dd/MM/yyyy" value={data.endDate} onChange={(e) => changeReport('endDate', e)} block />
+                                    </div>
+                                </div>
                             </div>
-                            <div className="col-sm-3  col-6  mb-2">
-                                <label htmlFor="" className='form-label'>ຫາວັນທິ</label>
-                                <DatePicker oneTap format="dd/MM/yyyy" value={data.endDate} onChange={(e) => changeReport('endDate', e)} block />
-                            </div>
+
                             <div className="col-sm-2 col-4 mb-2">
                                 <label htmlFor="" className='form-label'>ສະຖານະຮັບ</label>
-                                <SelectPicker data={status} value={data.status_pays} onChange={(e) => changeReport('status_pays', e)} block />
+                                <InputPicker data={status} value={data.status_pays} onChange={(e) => changeReport('status_pays', e)} block />
                             </div>
 
                             <div className="col-sm-4 col-8 mb-2">
                                 <label htmlFor="" className='form-label'>ຄົນຂໍ້ມູນ</label>
-                                <Input onChange={(e)=>handleFilter(e)} placeholder='ຄົ້ນຫາ...' />
+                                <InputGroup inside>
+                                    <InputGroup.Addon><i className='fas fa-search' /></InputGroup.Addon>
+                                    <Input onChange={(e) => handleFilter(e)} placeholder='ຄົ້ນຫາ...' />
+                                </InputGroup>
+                            </div>
+                            <div className="col-sm-1 col-4">
+                                <Button type='button' className='mt-4' appearance="primary" onClick={fetchPaybill}><i className='fas fa-search' /> ຄົ້ນຫາ </Button>
                             </div>
                         </div>
 
@@ -157,10 +218,13 @@ function CheckBillOnline() {
                                         <th width="10%" className='text-center'>ເລີກທີການສັ່ງຊື້</th>
                                         <th className=''>ຊື່ສິນຄ້າ</th>
                                         <th className=''>ເບີໂທລະສັບ</th>
+                                        <th className='text-center'>ຈຳນວນ</th>
+                                        <th className='text-center'>ກຣາມ</th>
                                         <th className='text-end' width="15%">ລວມເງິນ</th>
                                         <th>ເລກທີໂອຍ</th>
                                         <th>ລາຍລະອຽດ</th>
                                         <th className='text-center' width={'5%'}>ສະຖານະ</th>
+                                        <th className='text-center'>ພະນັງານ</th>
                                         <th className='text-center w-10' width={'5%'}>ເອກະສານຊຳລະ</th>
                                         <th className='text-center' width={'5%'}>ເບີ່ງລະອຽດ</th>
                                     </tr>
@@ -169,7 +233,7 @@ function CheckBillOnline() {
                                 <tbody>
                                     {isLoading === true ? (
                                         <tr>
-                                            <td colSpan={11} className='bg-white'> <Placeholder.Grid rows={5} columns={8} active /></td>
+                                            <td colSpan={14} className='bg-white'> <Placeholder.Grid rows={5} columns={8} active /></td>
                                         </tr>
                                     ) : (
                                         itemPaybill.length > 0 ? (
@@ -180,19 +244,36 @@ function CheckBillOnline() {
                                                     <td className='text-center'>{item.pay_sale_code}</td>
                                                     <td>{item.cus_fname} {item.cus_lname} </td>
                                                     <td>{item.cus_tel}</td>
+                                                    <td className='text-center'>{item.qty_baht}</td>
+                                                    <td className='text-center'>{item.price_gram}</td>
                                                     <td className='text-end'>{numeral(item.balance_gold).format('0,00')}</td>
                                                     <td className=''>{item.transfer_number}</td>
                                                     <td className=''>{item.pays_remark}</td>
-                                                    <td className={`text-center ${item.status_pays === 1 ? 'text-red' : item.status_pays === 2 ? 'text-orange' : 'text-green'}`} >{item.status_pays === 1 ? "ຍັງບໍ່ໄດ້ຮັບການກວດສອບ" : item.status_pays === 2 ? "ໄດ້ຮັບການກວດສອບແລ້ວ" : "ມອບຮັບສິນຄ້າສຳເລັດ"}</td>
+                                                    <td className={`text-center ${item.status_pays === 1 ? 'text-red' : item.status_pays === 2 ? 'text-orange' : 'text-green'}`} >
+                                                        {item.status_sale_use === 1 ? (
+                                                            <>
+                                                                {item.status_pays === 1 ? "ຄ້າງກວດສອບ" : item.status_pays === 2 ? "ກວດສອບແລ້ວ" : "ມອບຮັບສິນຄ້າສຳເລັດ"}
+                                                            </>
+                                                        ) : (<>
+                                                            <span className='text-red'>ຂໍ້ມູນນີ້ໄດ້ມີການປະຕິເສດ</span>
+                                                        </>)}
+                                                    </td>
+                                                    <td>{item.status_pays === 3 ? item.user_approved_name : item.check_user_name}</td>
                                                     <td className='text-center'>
                                                         <span className='text-red' onClick={() => handleDownload(`${urlimage}document/paysale/${item.file_transfer}`)} role='button'><i class="fa-solid fa-download" /> ໄຟລ໌... </span>
                                                     </td >
-                                                    <td className='text-center'><span className='px-2 rounded text-white bg-blue' onClick={() => handleView(item)} role='button'><i class="fa-solid fa-eye"></i> </span> </td>
+                                                    <td className='text-center'>
+                                                        <button type='button' className='btn btn-xs btn-blue' onClick={() => handleView(item)}><i class="fa-solid fa-eye"></i> </button>
+                                                        {item.status_pays === 1 && (
+                                                            <button type='button'  className='btn btn-xs btn-danger ms-2' onClick={() => handleDelete(item.pay_sale_uuid)} > <i class="fa-solid fa-trash"></i> </button>
+                                                        )}
+                                                        
+                                                         </td>
                                                 </tr>
                                             ))
                                         ) : (<>
                                             <tr>
-                                                <td colSpan={11} className='text-center text-red'> ບໍ່ພົບຂໍ້ມູນການນຳເຂົ້າສິນຄ້າ</td>
+                                                <td colSpan={14} className='text-center text-red'> ບໍ່ພົບຂໍ້ມູນການນຳເຂົ້າສິນຄ້າ</td>
                                             </tr>
                                         </>)
 
@@ -206,6 +287,7 @@ function CheckBillOnline() {
                     show={show}
                     handleClose={() => setShow(false)}
                     data={viewData}
+                    fetchData={fetchPaybill}
                 />
             </div>
         </>
