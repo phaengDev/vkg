@@ -125,7 +125,13 @@ const headleDelete = (id) => {
         { value: 'green', label: <><CheckRoundIcon color='green'  /> ສີຂຽວ</> },
         { value: 'orange', label: <><CheckRoundIcon color='orange'  /> ສິສົ້ມ</> },
         { value: 'blue', label: <><CheckRoundIcon color='blue'  /> ສີຟ້າ</> },
+        { value: 'indigo', label: <><CheckRoundIcon color='indigo'  /> Indigo</> },
         { value: 'cyan', label: <><CheckRoundIcon color='cyan'  /> ສີຟ້າຂຽວ</> },
+        { value: 'teal', label: <><CheckRoundIcon color='teal'  /> Teal</> },
+        { value: 'yellow', label: <><CheckRoundIcon color='yellow'  /> Yellow</> },
+        { value: 'lime', label: <><CheckRoundIcon color='lime'  /> Lime</> },
+        { value: 'pink', label: <><CheckRoundIcon color='pink'  /> Pink</> },
+        
       ];
     useEffect(() => {
         fetchZone();

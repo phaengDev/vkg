@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
-import { SelectPicker, Input, DatePicker, Message, useToaster, Modal, Button } from 'rsuite';
+import { SelectPicker, Input, DatePicker, Message, useToaster, Whisper, Tooltip } from 'rsuite';
 import { useOption, useUnite, useTitle, useZone } from '../../utils/selectOption';
 import Select from 'react-select'
 import axios from 'axios';
@@ -8,6 +8,7 @@ import moment from 'moment';
 import { Config } from '../../config/connect';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import FormReceivedMt from './Form-received-mt';
 function RormReceived() {
     const api = Config.urlApi;
     const itemTile = useTitle();
@@ -165,22 +166,22 @@ function RormReceived() {
     setFile(null); // Clear the selected file
 };
 
-const handleUpload = () => {
-    const formData = new FormData();
-    formData.append('file', file);
-    axios.post(api + 'received/upload', formData)
-      .then(response => {
-        if(response.status===200){
-            alert(response.data.message)
-        }else{
-            alert(response.data.message)
-        }
-        console.log(response.data);
-      })
-      .catch(error => {
-        alert('Error uploading file:', error);
-      });
-  };
+// const handleUpload = () => {
+//     const formData = new FormData();
+//     formData.append('file', file);
+//     axios.post(api + 'received/upload', formData)
+//       .then(response => {
+//         if(response.status===200){
+//             alert(response.data.message)
+//         }else{
+//             alert(response.data.message)
+//         }
+//         console.log(response.data);
+//       })
+//       .catch(error => {
+//         alert('Error uploading file:', error);
+//       });
+//   };
 
     //=====================
     const toaster = useToaster();
@@ -211,6 +212,12 @@ const handleUpload = () => {
         fetchPorduct();
     }, [search])
 
+ 
+const tooltip = (
+  <Tooltip>
+   ນຳເຂົ້າແບບຈຳນວນຫຼາຍ ລາຍການ
+  </Tooltip>
+);
     return (
         <>
             <div id="content" className="app-content px-3">
@@ -225,15 +232,15 @@ const handleUpload = () => {
                         <div className="panel border  border-t-4 mb-4">
                             <div className="panel-body">
                                 <div className="row mb-2">
-                                    <div className="col-sm-2 form-group mb-2">
+                                    <div className="col-sm-4 col-lg-2 form-group mb-2">
                                         <label htmlFor="" className='form-label'>ວັນທິ </label>
                                         <DatePicker oneTap format="dd/MM/yyyy" defaultValue={datasearch.startDate} onChange={(e) => changeReport('startDate', e)} block placeholder="ເລືອກ" />
                                     </div>
-                                    <div className="col-sm-2 form-group mb-2">
+                                    <div className="col-sm-4 col-lg-2 form-group mb-2">
                                         <label htmlFor="" className='form-label'>ຫາວັນທິ</label>
                                         <DatePicker oneTap format="dd/MM/yyyy" defaultValue={datasearch.endDate} onChange={(e) => changeReport('endDate', e)} block placeholder="ເລືອກ" />
                                     </div>
-                                    <div className="col-sm-3 col-8 form-group mb-2">
+                                    <div className="col-sm-4 col-lg-3 col-8 form-group mb-2">
                                         <label htmlFor="" className='form-label'>ລາຍການສິນຄ້າ</label>
                                         <SelectPicker data={itemTile} onChange={(e) => changeReport('title_id_fk', e)} block placeholder="ເລືອກ" />
                                     </div>
@@ -241,12 +248,14 @@ const handleUpload = () => {
                                         <label htmlFor="" className='form-label'>ໂຊນຂາຍ</label>
                                         <SelectPicker data={itemZone} onChange={(e) => changeReport('zone_id_fk', e)} block placeholder="ເລືອກ" />
                                     </div>
-                                    <div className="col-sm-2 col-4 mt-4">
+                                    <div className="col-sm-6 col-lg-2 col-4 mt-4">
                                         <button type="button" onClick={heandleSearch} className="btn btn-danger fs-14px px-3 "><i className="fas fa-search fs-16px"></i> </button>
-                                        <button type="button" onClick={handleOpen} className="btn btn-green fs-14px ms-2 px-2 "><i class="fa-solid fa-cloud-arrow-down fa-lg"></i></button>
                                         {newform === false && (
                                             <button type="button" onClick={() => headleNewform(true)} className="btn btn-black fs-14px px-3 ms-2"><i className="fas fa-plus fs-16px"></i> </button>
                                         )}
+                                        <Whisper placement="top" controlId="control-id-hover" trigger="hover" speaker={tooltip}>
+                                        <button type="button" onClick={handleOpen} className="btn btn-green fs-14px ms-2 px-2 "><i className="fa-solid fa-file-circle-plus fs-4"/></button>
+                                        </Whisper>
                                     </div>
                                 </div>
                                 <div className="table-responsive">
@@ -359,7 +368,7 @@ const handleUpload = () => {
                     )}
                 </div>
 
-                <Modal open={open} onClose={handleClose}>
+                {/* <Modal open={open} onClose={handleClose}>
                     <Modal.Header>
                         <Modal.Title>ອັບໂຫຼດນຳເຂົ້າສິນຄ້າ</Modal.Title>
                     </Modal.Header>
@@ -393,7 +402,8 @@ const handleUpload = () => {
                             ຍົກເລີກ
                         </Button>
                     </Modal.Footer>
-                </Modal>
+                </Modal> */}
+                <FormReceivedMt open={open} hadleClose={handleClose} fetchData={fetchReceived} />
             </div>
 
         </>

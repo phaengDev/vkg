@@ -43,6 +43,11 @@ import ItemRegisterJop from '../screens/staff/item-register-jop';
 import ReviewsProduct from '../website/reviews-product';
 import GetmoneyBillSale from '../screens/action/GetmoneyBillSale';
 import Pycenters from '../website/Pycenters';
+import ShowPriceDays from '../screens/setting/ShowPriceDays';
+import ReportSaleQty from '../screens/reports/report-sale-qty';
+
+
+
 import { Routes, Route, Navigate } from 'react-router-dom';
 export default function AppContent() {
  
@@ -93,6 +98,8 @@ export default function AppContent() {
             <Route path='/reviews' element={<ReviewsProduct/>}/>
             <Route path='/p-center' element={<Pycenters/>}/>
             <Route path='/checkSale' element={<GetmoneyBillSale/>}/>
+            <Route path='/price-days' element={<ShowPriceDays/>}/>
+            <Route path='/list-qty' element={<ReportSaleQty/>}/>
             
         </Routes>
   )

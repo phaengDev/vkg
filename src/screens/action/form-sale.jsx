@@ -651,7 +651,8 @@ window.location.href = '/home';
         </Modal.Body>
         {/* )} */}
       </Modal>
-
+{showpay && (
+  
         <FromPayment 
         show={showpay}
         handleClose={()=>setShowPay(false)}
@@ -661,7 +662,7 @@ window.location.href = '/home';
         fetchChart={fetchItemCart}
         showStaff={() => setShowStaff(true)}
         />
-
+      )}
       <ModalOrder
         dataps={dataps}
         itemPattern={patternList}

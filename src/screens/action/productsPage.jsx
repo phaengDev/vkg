@@ -50,7 +50,6 @@ function ProductsPage() {
         try {
             axios.post(api + 'posd/create', formData)
                 .then(function (res) {
-                    console.log(res)
                     if (res.status === 200) {
                         fetchPorduct();
                         Alert.successData(res.data.message);

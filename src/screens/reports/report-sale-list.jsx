@@ -78,7 +78,7 @@ export default function ReportSaleList() {
         <div id="content" className="app-content px-3">
           <ol className="breadcrumb float-end">
             <li className="breadcrumb-item"><Link to={'/home'}>ໜ້າຫຼັກ</Link></li>
-            <li className="breadcrumb-item active">ຕາຕະລາຍງານຂາຍປະຈຳວັນ</li>
+            <li className="breadcrumb-item "><Link to={'/list-qty'} className='text-red'><i class="fa-solid fa-list"/> ລາຍງານລວມຈຳນວນ </Link></li>
             <li className="breadcrumb-item text-green" onClick={exportToExcel}  role='button'><i class="fa-solid fa-cloud-arrow-down"></i> Export Excel</li>
           </ol>
           <h1 className="page-header  mb-3">ລາຍການຂາຍປະຈຳວັນ</h1>

@@ -62,6 +62,10 @@ const userName=localStorage.getItem('username');
         </button>
       </div>
       <div className="navbar-nav">
+      <div className="navbar-item">
+          <a href="/price-days" target="_blank" className="navbar-link dropdown-toggle icon">
+            <i class="fa-solid fa-desktop fs-3 text-white"></i></a>
+        </div>
         <div className="navbar-item navbar-form">
           <form onSubmit={handelSearch} name="search">
             <div className="form-group">
@@ -76,6 +80,8 @@ const userName=localStorage.getItem('username');
             </div>
           </form>
         </div>
+
+        
     
         <div className="navbar-item navbar-user dropdown">
           <a href="javascript:;" className="navbar-link dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" >

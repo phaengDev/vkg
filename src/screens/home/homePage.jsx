@@ -243,6 +243,7 @@ function HomePage() {
         </div>
 
         {stock.map((row, key) =>
+        row.stock.length > 0 &&
           <div className="col-xl-4 col-lg-6">
             <div className="card border-0 mb-3 bg-blue-800 text-white border-4 border-top border-gold rounded-4 rounded-bottom-3">
               <div className="card-body">
