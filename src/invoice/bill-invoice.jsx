@@ -149,8 +149,6 @@ const Invoice = ({ show, handleClose,showStaff,fetchChart, invoice }) => {
                     </div>
 
 
-
-
                     <div className="text-center mt-4">
                         <Button variant="red" className='rounded-pill me-2' onClick={downloadImg}> <i class="fa-solid fa-cloud-arrow-down"/> ໂຫລດ </Button>
                         <ReactToPrint trigger={() =>

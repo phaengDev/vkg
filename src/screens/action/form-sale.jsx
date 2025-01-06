@@ -613,6 +613,7 @@ window.location.href = '/home';
         />
 
       )}
+      {showStaff && (
       <Modal show={showStaff} backdrop="static" centered onHide={handleClose}>
         <Modal.Body className='p-3'>
           <div className="row pt-3">
@@ -651,7 +652,8 @@ window.location.href = '/home';
         </Modal.Body>
         {/* )} */}
       </Modal>
-{showpay && (
+      )}
+      {showpay && (
   
         <FromPayment 
         show={showpay}
