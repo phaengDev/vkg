@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { DatePicker, SelectPicker, Input, InputGroup, Placeholder, Modal, Button,Grid, Row, Col } from 'rsuite';
+import { DatePicker, SelectPicker, Input, InputGroup, Placeholder, Modal, Button, Grid, Row, Col } from 'rsuite';
 import { useStaff } from '../../utils/selectOption';
 import { Config } from '../../config/connect';
 import axios from 'axios';
@@ -120,17 +120,17 @@ function ReportsaleDaily() {
   }, [])
 
   const [show, setShow] = useState(false);
-const [billId,setBillId]=useState('');
-const handlePrint=(id)=>{
-  setBillId(id)
-  setShow(true)
-}
+  const [billId, setBillId] = useState('');
+  const handlePrint = (id) => {
+    setBillId(id)
+    setShow(true)
+  }
 
 
-const [showStaff,setShowStaff]=useState(false)
-const fetchChart=()=>{
-  
-}
+  const [showStaff, setShowStaff] = useState(false)
+  const fetchChart = () => {
+
+  }
   return (
     <>
       <div id="content" className="app-content px-3">
@@ -143,53 +143,47 @@ const fetchChart=()=>{
         <div className="panel " data-sortable-id="ui-widget-5">
 
           <div className="panel-body">
-          <Grid fluid>
-          <Row>
-            {/* <div className="row mb-4"> */}
-              <Col xs={12} sm={8} md={8} lg={5} className='mb-2'>
-                <label htmlFor="" className='form-label'>ວັນທີ</label>
-                <DatePicker oneTap color="red" format="dd/MM/yyyy" onChange={(e) => handleChange('startDate', e)} defaultValue={dataSearch.startDate} placeholder='ວັນທີ' block />
-              </Col>
-              <Col xs={12} sm={8} md={8} lg={5} className='mb-2'>
-                <label htmlFor="" className='form-label'>ວັນທີ</label>
-                <DatePicker oneTap format="dd/MM/yyyy" onChange={(e) => handleChange('endDate', e)} defaultValue={dataSearch.endDate} placeholder='ວັນທີ' block />
-              </Col>
-              <Col xs={12} sm={8} md={8} lg={6} className='mb-2'>
-                <label htmlFor="" className='form-label'>ພະນັກງານຂາຍ</label>
-                <SelectPicker data={itemStaff} onChange={(e) => handleChange('staffId', e)} block placeholder="ເລືອກ" />
-              </Col>
-              <Col xs={12} sm={8} md={6} lg={4} className='mb-2'>
-                <label htmlFor="" className='form-label'>ສະຖານະ</label>
-                <SelectPicker data={datastt} onChange={(e) => handleChange('statusOff', e)} block placeholder="ເລືອກ" />
-              </Col>
-              <Col xs={24} sm={8} md={6} lg={3} className=" mt-4 mb-2">
-                <button type='button' onClick={handleSaerch} className='btn btn-danger rounded ms-1'><i className="fas fa-search fa-lg"></i></button>
-                <button type='button' onClick={exportToExcel} className='btn btn-green rounded ms-1'><i className="fas fa-file-excel fa-lg"></i></button>
-              </Col>
-            {/* </div> */}
-            </Row>
+            <Grid fluid>
+              <Row>
+                {/* <div className="row mb-4"> */}
+                <Col xs={12} sm={8} md={8} lg={5} className='mb-2'>
+                  <label htmlFor="" className='form-label'>ວັນທີ</label>
+                  <DatePicker oneTap color="red" format="dd/MM/yyyy" onChange={(e) => handleChange('startDate', e)} defaultValue={dataSearch.startDate} placeholder='ວັນທີ' block />
+                </Col>
+                <Col xs={12} sm={8} md={8} lg={5} className='mb-2'>
+                  <label htmlFor="" className='form-label'>ວັນທີ</label>
+                  <DatePicker oneTap format="dd/MM/yyyy" onChange={(e) => handleChange('endDate', e)} defaultValue={dataSearch.endDate} placeholder='ວັນທີ' block />
+                </Col>
+                <Col xs={12} sm={8} md={8} lg={6} className='mb-2'>
+                  <label htmlFor="" className='form-label'>ພະນັກງານຂາຍ</label>
+                  <SelectPicker data={itemStaff} onChange={(e) => handleChange('staffId', e)} block placeholder="ເລືອກ" />
+                </Col>
+                <Col xs={12} sm={8} md={6} lg={4} className='mb-2'>
+                  <label htmlFor="" className='form-label'>ສະຖານະ</label>
+                  <SelectPicker data={datastt} onChange={(e) => handleChange('statusOff', e)} block placeholder="ເລືອກ" />
+                </Col>
+                <Col xs={24} sm={8} md={6} lg={3} className=" mt-4 mb-2">
+                  <button type='button' onClick={handleSaerch} className='btn btn-danger rounded ms-1'><i className="fas fa-search fa-lg"></i></button>
+                  <button type='button' onClick={exportToExcel} className='btn btn-green rounded ms-1'><i className="fas fa-file-excel fa-lg"></i></button>
+                </Col>
+                {/* </div> */}
+              </Row>
             </Grid>
 
-            <div className="d-lg-flex align-items-center mb-2">
-                {/* <div className="d-lg-flex d-none align-items-center text-nowrap">
-                  page:
-                  <select className="form-select form-select-sm ms-2  ps-2 ">
-                    <option>100</option>
-                    <option>50</option>
-                    <option selected="">30</option>
-                  </select>
-                </div> */}
-                <div className="pagination pagination-sm mb-0 ms-auto justify-content-center">
+            <Grid fluid>
+              <Row>
+                <Col xs={16} lg={6} xsPush={8} lgPush={18}>
                   <InputGroup inside block>
                     <InputGroup.Addon>
                       <i className="fas fa-search"></i>
                     </InputGroup.Addon>
                     <Input onChange={(event) => Filter(event)} placeholder='ເລກທີບິນ' />
                   </InputGroup>
-                </div>
-              </div>
+                </Col>
+              </Row>
+            </Grid>
 
-            <div className="table-responsive">
+            <div className="table-responsive mt-2">
               <table id="table-to-xls" className="table table-striped table-bordered align-middle w-100 text-nowrap">
                 <thead className='thead-plc'>
                   <tr>
@@ -235,7 +229,7 @@ const fetchChart=()=>{
                               <td>{val.sale_remark}</td>
                               <td>{val.userName}</td>
                               <td>{val.status_off_sale === 1 ? 'ຄ້າງປິດ' : 'ປິດຍອດ'}</td>
-                              <td className='text-center'><span className='btn btn-xs btn-danger' role='button' onClick={()=>handlePrint(val.sale_uuid)}><i class="fa-solid fa-print"></i></span></td>
+                              <td className='text-center'><span className='btn btn-xs btn-danger' role='button' onClick={() => handlePrint(val.sale_uuid)}><i class="fa-solid fa-print"></i></span></td>
                             </tr>
                           ))}
                         </>
@@ -245,42 +239,42 @@ const fetchChart=()=>{
                         </tr>
                       )}
                 </tbody>
-                { itemData.length > 0 && (
-                <tfoot>
-                  {itemData.length > 0 && (
-                    Object.keys(sumData).map((currency, key) => (
-                      <tr key={key}>
-                        <td colSpan={4} className='text-end'>ລວມຍອດທັງໝົດ ({currency})</td>
+                {itemData.length > 0 && (
+                  <tfoot>
+                    {itemData.length > 0 && (
+                      Object.keys(sumData).map((currency, key) => (
+                        <tr key={key}>
+                          <td colSpan={4} className='text-end'>ລວມຍອດທັງໝົດ ({currency})</td>
 
-                        <td className='text-end'>{formatNumber(sumData[currency].balance_total)}</td>
-                        <td className='text-end'>{formatNumber(sumData[currency].balance_totalpay)} {sumData[currency].genus}</td>
-                        <td className='text-end'>{formatNumber(sumData[currency].balance_cash)} {sumData[currency].genus}</td>
-                        <td className='text-end'>{formatNumber(sumData[currency].balance_transfer)} {sumData[currency].genus}</td>
-                        <td className='text-end'>{formatNumber(sumData[currency].balance_payment)} {sumData[currency].genus}</td>
-                        <td className='text-end'>{formatNumber(sumData[currency].balance_return)} ₭</td>
-                        <td colSpan={6}></td>
-                      </tr>
-                    ))
-                  )}
-                </tfoot>
+                          <td className='text-end'>{formatNumber(sumData[currency].balance_total)}</td>
+                          <td className='text-end'>{formatNumber(sumData[currency].balance_totalpay)} {sumData[currency].genus}</td>
+                          <td className='text-end'>{formatNumber(sumData[currency].balance_cash)} {sumData[currency].genus}</td>
+                          <td className='text-end'>{formatNumber(sumData[currency].balance_transfer)} {sumData[currency].genus}</td>
+                          <td className='text-end'>{formatNumber(sumData[currency].balance_payment)} {sumData[currency].genus}</td>
+                          <td className='text-end'>{formatNumber(sumData[currency].balance_return)} ₭</td>
+                          <td colSpan={6}></td>
+                        </tr>
+                      ))
+                    )}
+                  </tfoot>
                 )}
               </table>
             </div>
           </div>
         </div>
-        <ViewSaleList 
-        data={data} 
-        open={open} 
-        handleModal={()=>handleModal(false)} />
+        <ViewSaleList
+          data={data}
+          open={open}
+          handleModal={() => handleModal(false)} />
 
-     
-<Invoice
-invoice={billId}
-show={show}
-handleClose={()=>setShow(false)}
-showStaff={()=>setShowStaff(true)}
-fetchChart={fetchChart}
-/>
+
+        <Invoice
+          invoice={billId}
+          show={show}
+          handleClose={() => setShow(false)}
+          showStaff={() => setShowStaff(true)}
+          fetchChart={fetchChart}
+        />
       </div>
     </>
   )

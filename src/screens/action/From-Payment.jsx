@@ -6,7 +6,7 @@ import { Urlimage } from '../../config/connect';
 import axios from 'axios';
 import { Config } from '../../config/connect';
 import { Notification } from '../../utils/Notifig';
-function FromPayment({ show, handleClose, staffId, datacart, fetchChart, balanceTotal, showStaff }) {
+function FromPayment({ show, handleClosePay, staffId, datacart, fetchChart, balanceTotal, idInvoice,showInvoice }) {
     const api = Config.urlApi;
     const img = Urlimage.url;
     const userId = localStorage.getItem('user_uuid');
@@ -131,13 +131,51 @@ function FromPayment({ show, handleClose, staffId, datacart, fetchChart, balance
         }
     }, [balanceCash, balanceTransfer, balanceReturn])
 
-    const [showBill, setShowBill] = useState(false);
-    const [print, setPrint] = useState(false);
-    const [invoice, setInvoice] = useState('');
+    // const [showBill, setShowBill] = useState(false);
+    // const [print, setPrint] = useState(false);
+    // const [invoice, setInvoice] = useState('');
 
-    const handlePayment = () => {
-        axios.post(api + 'payment/create', order).then(function (res) {
+    // const handlePayment = () => {
+    //     axios.post(api + 'payment/create', order).then(function (res) {
+    //         if (res.status === 200) {
+    //             fetchChart();
+    //             setOrder({
+    //                 bill_shop: '',
+    //                 balance_total: '0',
+    //                 total_grams: '0',
+    //                 balance_cash: '0',
+    //                 balance_transfer: '0',
+    //                 balance_payment: '0',
+    //                 balance_return: '0',
+    //                 rate_price: 1,
+    //                 balance_totalpay: 0,
+    //                 currency_id_fk: 22001,
+    //             })
+    //             handleClose()
+    //             setBalanceReturn(0);
+    //             setBalanceCash(0);
+    //             setBalanceTransfer(0);
+    //             setBalanceSale(0);
+    //             setTotalBalancePay(0);
+    //             setInvoice(res.data.id);
+    //             setPrint(true);
+    //             setShowBill(true)
+    //             Notification.success('ການດຳເນິນງານສຳເລັດ', 'ແຈ້ງເຕືອນ')
+    //         } else {
+    //             Notification.error('ການດຳເນິນງານບໍ່ສຳເລັດ', 'ແຈ້ງເຕືອນ')
+    //         }
+    //     }).catch(function () {
+    //         Notification.error('ການດຳເນິນງານບໍ່ສຳເລັດ', 'ແຈ້ງເຕືອນ')
+    //     });
+    // }
+
+
+    const handlePayment = async () => {
+        try {
+            const res = await axios.post(api + 'payment/create', order);
             if (res.status === 200) {
+                idInvoice(res.data.id);  // Set invoice first
+                showInvoice(true);
                 fetchChart();
                 setOrder({
                     bill_shop: '',
@@ -150,25 +188,22 @@ function FromPayment({ show, handleClose, staffId, datacart, fetchChart, balance
                     rate_price: 1,
                     balance_totalpay: 0,
                     currency_id_fk: 22001,
-                })
-                handleClose()
+                });
                 setBalanceReturn(0);
                 setBalanceCash(0);
                 setBalanceTransfer(0);
                 setBalanceSale(0);
                 setTotalBalancePay(0);
-                setInvoice(res.data.id);
-                setPrint(true);
-                setShowBill(true)
-                Notification.success('ການດຳເນິນງານສຳເລັດ', 'ແຈ້ງເຕືອນ')
+                handleClosePay();
+                Notification.success('ການດຳເນິນງານສຳເລັດ', 'ແຈ້ງເຕືອນ');
             } else {
-                Notification.error('ການດຳເນິນງານບໍ່ສຳເລັດ', 'ແຈ້ງເຕືອນ')
+                Notification.error('ການດຳເນິນງານບໍ່ສຳເລັດ', 'ແຈ້ງເຕືອນ');
             }
-        }).catch(function () {
-            Notification.error('ການດຳເນິນງານບໍ່ສຳເລັດ', 'ແຈ້ງເຕືອນ')
-        });
-    }
-
+        } catch (error) {
+            Notification.error('ການດຳເນິນງານບໍ່ສຳເລັດ', 'ແຈ້ງເຕືອນ');
+        }
+    };
+    
 
     return (
         <>
@@ -271,7 +306,7 @@ function FromPayment({ show, handleClose, staffId, datacart, fetchChart, balance
                             <hr />
                             <div className="row gx-3">
                                 <div className="col-4">
-                                    <button type='button' onClick={handleClose} className="btn btn-danger w-100 fs-14px rounded-3 fw-bold mb-0 d-block py-3"  >
+                                    <button type='button' onClick={handleClosePay} className="btn btn-danger w-100 fs-14px rounded-3 fw-bold mb-0 d-block py-3"  >
                                         <i className="fa-solid fa-rotate-left"></i> ຍົກເລິກ
                                     </button>
                                 </div>
@@ -286,7 +321,7 @@ function FromPayment({ show, handleClose, staffId, datacart, fetchChart, balance
                 </Modal.Body>
             </Modal>
 
-            {print && (
+            {/* {print && (
                 <div id="printableArea">
                     <Invoice
                         show={showBill}
@@ -295,7 +330,7 @@ function FromPayment({ show, handleClose, staffId, datacart, fetchChart, balance
                         showStaff={() => showStaff(true)}
                         fetchChart={fetchChart()} />
                 </div>
-            )}
+            )} */}
         </>
     )
 }

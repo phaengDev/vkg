@@ -5,10 +5,10 @@ import { Input, Message, useToaster, InputGroup, InputPicker } from 'rsuite';
 import axios from 'axios';
 import { Config, Urlimage } from '../../config/connect';
 import numeral from 'numeral';
-import Invoice from '../../invoice/bill-invoice';
+// import Invoice from '../../invoice/bill-invoice';
 // import Swal from 'sweetalert2';
-import { useStaff, useOption} from '../../utils/selectOption';
-
+import { useStaff, useOption } from '../../utils/selectOption';
+import Invoice from '../../invoice/bill-invoice';
 import ReactToPrint from 'react-to-print';
 import Select from 'react-select'
 import ModalOrder from './Modal-order';
@@ -18,15 +18,15 @@ function FormSale() {
   const api = Config.urlApi;
   const img = Urlimage.url;
   const itemOption = useOption();
- 
+
   const navigate = useNavigate();
   const handleBack = () => {
-window.location.href = '/home';
+    window.location.href = '/home';
     // navigate(`/home`);
   }
 
 
-  const [showBill, setShowBill] = useState(false);
+  // const [showBill, setShowBill] = useState(false);
   const itemStaff = useStaff();
   const userId = localStorage.getItem('user_uuid')
   const barnchId = localStorage.getItem('branch_Id')
@@ -364,6 +364,11 @@ window.location.href = '/home';
   const itemcartOrder = useRef();
   const [isPrintVisible, setPrintVisible] = useState(false);
 
+  const [showInvoice, setShowInvoice] = useState(false);
+  const [invoice, setInvoice] = useState('');
+useEffect(()=>{
+},[showInvoice,invoice]);
+
   return (
     <>
       <div id="app" className="app app-content-full-height app-without-sidebar app-without-header">
@@ -604,7 +609,7 @@ window.location.href = '/home';
             fetchChart={fetchItemCart} />
         </div>
       )} */}
-      
+
       {isPrintVisible === true && (
         <PrintBillTest
           ref={itemcartOrder}
@@ -614,55 +619,57 @@ window.location.href = '/home';
 
       )}
       {showStaff && (
-      <Modal show={showStaff} backdrop="static" centered onHide={handleClose}>
-        <Modal.Body className='p-3'>
-          <div className="row pt-3">
-            <div className="col-sm-12 ">
-              <form onSubmit={heandleSearch}>
-                <div className=" text-center mb-4">
-                  <img src="/assets/img/user/user.png" alt="" className="mw-100 w-120px rounded-pill " />
-                </div>
-                <div className="from-group text-center mb-4">
-                  <label htmlFor="" className='form-label fs-16px'>ລະຫັດພະນັກງານ</label>
-                  {checkUser === 1 ? (
-                    <InputGroup inside size='lg'>
-                      <InputGroup.Button onClick={() => checkUseFrom(2)}>
-                        <i className='fas fa-user text-red' />
-                      </InputGroup.Button>
-                      <Input size='lg'  ref={inputRef} autoFocus onChange={(e) => headleCheng('userSale_id', e)} className='text-center' placeholder='||||||||||||||||||||||||||||' autoComplete="off" required />
-                    </InputGroup>
-                  ) : checkUser === 2 && (
-                    <div className='row' >
-                      <Select size='lg' ref={inputRef} options={itemStaff} onChange={(e) => handleChangeStaff(e.value)} className='text-start col-11' placeholder='ເລອກພະນັກງານ' required />
-                      <button type='button' onClick={() => checkUseFrom(1)} class="btn btn-red col-1" ><i class="fa-solid fa-xmark mt-1 fs-5" /></button>
-                    </div>
-                  )}
+        <Modal show={showStaff} backdrop="static" centered onHide={handleClose}>
+          <Modal.Body className='p-3'>
+            <div className="row pt-3">
+              <div className="col-sm-12 ">
+                <form onSubmit={heandleSearch}>
+                  <div className=" text-center mb-4">
+                    <img src="/assets/img/user/user.png" alt="" className="mw-100 w-120px rounded-pill " />
+                  </div>
+                  <div className="from-group text-center mb-4">
+                    <label htmlFor="" className='form-label fs-16px'>ລະຫັດພະນັກງານ</label>
+                    {checkUser === 1 ? (
+                      <InputGroup inside size='lg'>
+                        <InputGroup.Button onClick={() => checkUseFrom(2)}>
+                          <i className='fas fa-user text-red' />
+                        </InputGroup.Button>
+                        <Input size='lg' ref={inputRef} autoFocus onChange={(e) => headleCheng('userSale_id', e)} className='text-center' placeholder='||||||||||||||||||||||||||||' autoComplete="off" required />
+                      </InputGroup>
+                    ) : checkUser === 2 && (
+                      <div className='row' >
+                        <Select size='lg' ref={inputRef} options={itemStaff} onChange={(e) => handleChangeStaff(e.value)} className='text-start col-11' placeholder='ເລອກພະນັກງານ' required />
+                        <button type='button' onClick={() => checkUseFrom(1)} class="btn btn-red col-1" ><i class="fa-solid fa-xmark mt-1 fs-5" /></button>
+                      </div>
+                    )}
 
-                </div>
+                  </div>
 
-              </form>
-              <p className='text-center mb-2'><a href='home' className='text-h-red'><i className="fa-solid fa-hand-point-left"></i>  ຍ້ອນກັບ</a></p>
-              {error === true && (
-                <div className="alert alert-warning alert-dismissible fade show mb-0">
-                  <i className="fa-solid fa-circle-exclamation fa-xl"></i> ລະຫັດພະນັກງານບໍ່ຖຶກຕ້ອງ
-                </div>
-              )}
+                </form>
+                <p className='text-center mb-2'><a href='home' className='text-h-red'><i className="fa-solid fa-hand-point-left"></i>  ຍ້ອນກັບ</a></p>
+                {error === true && (
+                  <div className="alert alert-warning alert-dismissible fade show mb-0">
+                    <i className="fa-solid fa-circle-exclamation fa-xl"></i> ລະຫັດພະນັກງານບໍ່ຖຶກຕ້ອງ
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        </Modal.Body>
-        {/* )} */}
-      </Modal>
+          </Modal.Body>
+          {/* )} */}
+        </Modal>
       )}
       {showpay && (
-  
-        <FromPayment 
-        show={showpay}
-        handleClose={()=>setShowPay(false)}
-        staffId={staffId}
-        datacart={itemcart}
-        balanceTotal={totalBalancePay}
-        fetchChart={fetchItemCart}
-        showStaff={() => setShowStaff(true)}
+
+        <FromPayment
+          show={showpay}
+          handleClosePay={() => setShowPay(false)}
+          staffId={staffId}
+          datacart={itemcart}
+          balanceTotal={totalBalancePay}
+          fetchChart={fetchItemCart}
+          showStaff={() => setShowStaff(true)}
+          showInvoice={setShowInvoice}
+          idInvoice={setInvoice}
         />
       )}
       <ModalOrder
@@ -672,6 +679,20 @@ window.location.href = '/home';
         handleClose={() => setShowView(false)}
         staff={data}
         fetchItemCart={fetchItemCart} />
+
+
+
+      {showInvoice && (
+        <div id="printableArea">
+          <Invoice
+            show={showInvoice}
+            handleClose={() => setShowInvoice(false)}
+            invoice={invoice}
+            showStaff={()=>setShowStaff(false)}
+            fetchChart={fetchItemCart}
+          />
+        </div>
+      )}
     </>
   )
 }
